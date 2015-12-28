@@ -15,14 +15,14 @@ public class Physics {
 	private double v, s;
 	private final double a = 9.8;
 	private int t;
-	private final int time;
+	private final long height;
 	private HashMap<Integer, List> data = new HashMap<>();
 
-	public Physics(final int time) {
-		if (time < 0) {
+	public Physics(final long height) {
+		if (height < 0) {
 			throw new InvalidParameterException("Time cannot be negative");
 		}
-		this.time = time;
+		this.height = height;
 	}
 
 	public HashMap<Integer, List> getData() {
@@ -30,10 +30,10 @@ public class Physics {
 	}
 
 	public void runSimulation() {
-		for (t = 0; t < time; t++) {
+		for (double s = 0; s <= height; t++) {
 			v = a * t;
 			v = new BigDecimal(v).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
-			s = 0.5 * a * Math.pow(t, 2);
+			s = (0.5 * a * Math.pow(t, 2));
 			s = new BigDecimal(s).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
 			List<Double> list = new ArrayList<>();
 			list.add(v);
