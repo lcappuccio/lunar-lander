@@ -20,7 +20,7 @@ public class PhysicsTest {
 	@Test
 	public void run_simulation_physics() {
 		sut = new Physics(100);
-		sut.runSimulation();
+		sut.run();
 		HashMap<Integer, List> data = sut.getData();
 		assertTrue(data.get(1).get(0).equals(9.8));
 		assertTrue(data.get(2).get(0).equals(19.6));

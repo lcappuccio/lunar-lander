@@ -2,8 +2,7 @@ package org.systemexception.lunarlander.main;
 
 import org.systemexception.lunarlander.model.Physics;
 
-import java.util.HashMap;
-import java.util.List;
+import java.io.IOException;
 
 /**
  * @author leo
@@ -11,14 +10,14 @@ import java.util.List;
  */
 public class Main {
 
-	private static Physics physics = new Physics(10);
+	private static Physics physics = new Physics(1000);
 
-	public static void main(String[] args) {
-		physics.runSimulation();
-		HashMap<Integer, List> data = physics.getData();
-		for(Integer time: data.keySet()) {
-			List list = data.get(time);
-			System.out.println(list.get(0) + ", " + list.get(1));
+	public static void main(String[] args) throws IOException {
+		physics.run();
+		if ( System.in.available() > 0 )
+		{
+			char keyChar = (char)System.in.read();
+			System.out.println(keyChar);
 		}
 	}
 }

@@ -10,7 +10,7 @@ import java.util.List;
  * @author leo
  * @date 28/12/15 21:30
  */
-public class Physics {
+public class Physics implements Runnable {
 
 	private double v, s;
 	private final double a = 9.8;
@@ -29,7 +29,8 @@ public class Physics {
 		return data;
 	}
 
-	public void runSimulation() {
+	@Override
+	public void run() {
 		for (double s = 0; s <= height; t++) {
 			v = a * t;
 			v = new BigDecimal(v).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
@@ -39,7 +40,12 @@ public class Physics {
 			list.add(v);
 			list.add(s);
 			data.put(t, list);
+			System.out.println(list.get(0) + ", " + list.get(1));
+			try {
+				Thread.sleep(250);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 	}
-
 }
