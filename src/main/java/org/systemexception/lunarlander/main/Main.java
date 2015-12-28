@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class Main {
 
-	private static Physics physics = new Physics();
+	private static Physics physics = new Physics(10);
 
 	public static void main(String[] args) {
 		physics.runSimulation();

@@ -1,6 +1,7 @@
 package org.systemexception.lunarlander.model;
 
 import java.math.BigDecimal;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,14 +15,22 @@ public class Physics {
 	private double v, s;
 	private final double a = 9.8;
 	private int t;
+	private final int time;
 	private HashMap<Integer, List> data = new HashMap<>();
+
+	public Physics(final int time) {
+		if (time < 0) {
+			throw new InvalidParameterException("Time cannot be negative");
+		}
+		this.time = time;
+	}
 
 	public HashMap<Integer, List> getData() {
 		return data;
 	}
 
 	public void runSimulation() {
-		for (t = 0; t < 100; t++) {
+		for (t = 0; t < time; t++) {
 			v = a * t;
 			v = new BigDecimal(v).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
 			s = 0.5 * a * Math.pow(t, 2);

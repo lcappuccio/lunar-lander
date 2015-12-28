@@ -31,8 +31,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<!-- TODO Add Main class here -->
-							<mainClass></mainClass>
+							<mainClass>org.systemexception.lunarlander.main.Main</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>
@@ -53,6 +52,11 @@
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>0.7.5.201505241946</version>
+				<configuration>
+					<excludes>
+						<exclude>**/*Main.*</exclude>
+					</excludes>
+				</configuration>
 				<executions>
 					<execution>
 						<goals>
