@@ -84,24 +84,24 @@ public class TestJbox {
 	private static void setUpMatrices() {
 		glMatrixMode(GL_PROJECTION);
 
-		GL11.glShadeModel(GL11.GL_SMOOTH);
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		GL11.glDisable(GL11.GL_DEPTH_TEST);
-		GL11.glDisable(GL11.GL_LIGHTING);
+		glShadeModel(GL11.GL_SMOOTH);
+		glDisable(GL11.GL_TEXTURE_2D);
+		glDisable(GL11.GL_DEPTH_TEST);
+		glDisable(GL11.GL_LIGHTING);
 
-		GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-		GL11.glClearDepth(1);
+		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		glClearDepth(1);
 
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		glEnable(GL11.GL_BLEND);
+		glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-		GL11.glViewport(0, 0, Display.getWidth(), Display.getHeight());
-		GL11.glMatrixMode(GL11.GL_MODELVIEW);
+		glViewport(0, 0, Display.getWidth(), Display.getHeight());
+		glMatrixMode(GL11.GL_MODELVIEW);
 
-		GL11.glMatrixMode(GL11.GL_PROJECTION);
-		GL11.glLoadIdentity();
-		GL11.glOrtho(0,  Display.getWidth(), Display.getHeight(), 0, 1, -1);
-		GL11.glMatrixMode(GL11.GL_MODELVIEW);
+		glMatrixMode(GL11.GL_PROJECTION);
+		glLoadIdentity();
+		glOrtho(0, Display.getWidth(), Display.getHeight(), 0, 1, -1);
+		glMatrixMode(GL11.GL_MODELVIEW);
 	}
 
 	private static void setUpObjects() {
