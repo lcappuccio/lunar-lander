@@ -120,11 +120,11 @@ public class MainGui extends javax.swing.JFrame {
     }//GEN-LAST:event_fileMenuQuitActionPerformed
 
     private void mainPanelMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mainPanelMousePressed
-		physics.addHeight();
+		physics.thrust();
     }//GEN-LAST:event_mainPanelMousePressed
 
     private void jButton1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MousePressed
-		physics.addHeight();
+		physics.thrust();
     }//GEN-LAST:event_jButton1MousePressed
 
 	/**

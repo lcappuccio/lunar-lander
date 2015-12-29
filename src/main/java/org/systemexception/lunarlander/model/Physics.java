@@ -2,6 +2,7 @@ package org.systemexception.lunarlander.model;
 
 import java.math.BigDecimal;
 import java.security.InvalidParameterException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,8 +15,7 @@ public class Physics implements Runnable {
 
 	private double v, s;
 	private double a = 9.8;
-	private int t;
-	private long height;
+	private double height;
 	private HashMap<Integer, List> data = new HashMap<>();
 
 	public Physics(final long height) {
@@ -29,32 +29,30 @@ public class Physics implements Runnable {
 		return data;
 	}
 
-	public void addHeight() {
+	public void thrust() {
 		this.a -= 1;
 		System.out.println("G now: " + a);
 	}
 
 	@Override
 	public void run() {
+		double v0 = 0d;
+		double s0 = 0d;
 		while (s <= height) {
-			if (a > 0) {
-				v = a * t;
-				v = new BigDecimal(v).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
-				s = (0.5 * a * Math.pow(t, 2));
-				s = new BigDecimal(s).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
-			} else {
-				v = a * t;
-				v = new BigDecimal(v).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
-				s = s + (0.5 * a * Math.pow(t, 2));
-				s = new BigDecimal(s).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
-			}
-			List<Double> list = new ArrayList<>();
-			list.add(v);
-			list.add(s);
-			data.put(t, list);
-			System.out.println(list.get(0) + ", " + list.get(1));
+			int nano = LocalDateTime.now().getNano();
+			v = v0 + (a * (nano / 100000000));
+//			v = new BigDecimal(v).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
+			s = s0 + (0.5d * a * Math.pow((nano / 100000000), 2));
+//			s = new BigDecimal(s).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
+//			List<Double> list = new ArrayList<>();
+//			list.add(v);
+//			list.add(s);
+//			data.put(0, list);
+			System.out.println(v + ", " + s + ", " + a);
+			v0 = v;
+			s0 = s;
 			try {
-				Thread.sleep(125);
+				Thread.sleep(50);
 				a += 0.2;
 				if (a > 9.8) {
 					a = 9.8;
@@ -62,7 +60,7 @@ public class Physics implements Runnable {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			t++;
+
 		}
 	}
 }
