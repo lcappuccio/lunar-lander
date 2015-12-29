@@ -12,3 +12,17 @@ Lunar Lander, a [classic 1979 game](https://en.wikipedia.org/wiki/Lunar_Lander_%
 
 [![Build Status](https://travis-ci.org/lcappuccio/lunar-lander.svg?branch=develop)](https://travis-ci.org/lcappuccio/lunar-lander)
 [![codecov.io](https://codecov.io/github/lcappuccio/lunar-lander/coverage.svg?branch=develop)](https://codecov.io/github/lcappuccio/lunar-lander?branch=develop)
+
+# Installation
+
+Download [LWJGL 2.9.4](http://legacy.lwjgl.org/) and copy to a library folder inside the project.
+Too launch the program append `-Djava.library
+path="path/to/native/libs"` as JVM parameter.
+
+**NOTE**
+The native libs should be the same version in the POM (2.9.3), the binaries are included in the project however.
+
+# Credits
+
+* [jbox2d](https://github.com/jbox2d/jbox2d) for the physics engine
+* [LWJGL (LightWeight Java Game Library)](http://legacy.lwjgl.org/) for the game engine

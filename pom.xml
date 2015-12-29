@@ -17,6 +17,16 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>org.jbox2d</groupId>
+			<artifactId>jbox2d-library</artifactId>
+			<version>2.2.1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.lwjgl.lwjgl</groupId>
+			<artifactId>lwjgl</artifactId>
+			<version>2.9.3</version>
+		</dependency>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.12</version>
@@ -31,8 +41,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<!-- TODO Add Main class here -->
-							<mainClass></mainClass>
+							<mainClass>org.systemexception.lunarlander.main.TestLWJGL</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>
@@ -53,6 +62,11 @@
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>0.7.5.201505241946</version>
+				<configuration>
+					<excludes>
+						<exclude>**/*Main.*</exclude>
+					</excludes>
+				</configuration>
 				<executions>
 					<execution>
 						<goals>
@@ -64,6 +78,21 @@
 						<phase>test</phase>
 						<goals>
 							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.googlecode.mavennatives</groupId>
+				<artifactId>maven-nativedependencies-plugin</artifactId>
+				<version>0.0.6</version>
+				<executions>
+					<execution>
+						<id>unpacknatives</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<!--suppress MavenModelInspection (this line is for IDEA)-->
+							<goal>copy</goal>
 						</goals>
 					</execution>
 				</executions>
