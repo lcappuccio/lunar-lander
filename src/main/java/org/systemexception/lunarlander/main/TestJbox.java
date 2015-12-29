@@ -23,7 +23,7 @@ public class TestJbox {
 	private static final String WINDOW_TITLE = "Physics in 2D!";
 	private static final int[] WINDOW_DIMENSIONS = {640, 480};
 
-	private static final World world = new World(new Vec2(0, -1.1f));
+	private static final World world = new World(new Vec2(0, -9.8f));
 	private static final Set<Body> bodies = new HashSet<Body>();
 
 	private static void render() {
@@ -83,6 +83,7 @@ public class TestJbox {
 		FixtureDef boxFixture = new FixtureDef();
 		boxFixture.density = 0.1f;
 		boxFixture.shape = boxShape;
+		boxFixture.restitution = 0.5f;
 		box.createFixture(boxFixture);
 		bodies.add(box);
 
@@ -94,7 +95,8 @@ public class TestJbox {
 		Body ground = world.createBody(groundDef);
 		FixtureDef groundFixture = new FixtureDef();
 		groundFixture.density = 1;
-		groundFixture.restitution = 0.3f;
+		groundFixture.restitution = 0.0f;
+		groundFixture.friction = 5f;
 		groundFixture.shape = groundShape;
 		ground.createFixture(groundFixture);
 		bodies.add(ground);
