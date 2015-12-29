@@ -29,7 +29,7 @@ public class TestJbox {
 	private static final String WINDOW_TITLE = "Physics in 2D!";
 	private static final int[] WINDOW_DIMENSIONS = {800, 600};
 
-	private static final World world = new World(new Vec2(0, -9.8f));
+	private static final World world = new World(new Vec2(0, 9.8f));
 	private static final Set<Body> bodies = new HashSet<Body>();
 
 	private static TrueTypeFont font;
@@ -59,12 +59,12 @@ public class TestJbox {
 		for (Body body : bodies) {
 			if (body.getType() == BodyType.DYNAMIC) {
 				if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
-					body.applyAngularImpulse(+0.005f);
-				} else if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
 					body.applyAngularImpulse(-0.005f);
+				} else if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
+					body.applyAngularImpulse(+0.005f);
 				}
 				if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
-					body.applyForce(new Vec2(0, 4f), body.getPosition());
+					body.applyForce(new Vec2(0, -4f), body.getPosition());
 				}
 				if (Mouse.isButtonDown(0)) {
 					Vec2 mousePosition = new Vec2(Mouse.getX(), Mouse.getY()).mul(1 / 60f);
@@ -100,7 +100,7 @@ public class TestJbox {
 
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glLoadIdentity();
-		GL11.glOrtho(0,  Display.getWidth(), 0, Display.getHeight(), 1, -1);
+		GL11.glOrtho(0,  Display.getWidth(), Display.getHeight(), 0, 1, -1);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 	}
 
@@ -119,7 +119,7 @@ public class TestJbox {
 		bodies.add(box);
 
 		BodyDef groundDef = new BodyDef();
-		groundDef.position.set(0, 0);
+		groundDef.position.set(0, 20);
 		groundDef.type = BodyType.STATIC;
 		PolygonShape groundShape = new PolygonShape();
 		groundShape.setAsBox(1000, 0);
