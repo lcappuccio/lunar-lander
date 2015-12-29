@@ -11,6 +11,7 @@ import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.TrueTypeFont;
+import org.newdawn.slick.opengl.TextureImpl;
 import org.newdawn.slick.util.ResourceLoader;
 
 import java.awt.*;
@@ -29,59 +30,46 @@ public class TestJbox {
 	private static final String WINDOW_TITLE = "Physics in 2D!";
 	private static final int[] WINDOW_DIMENSIONS = {800, 600};
 
-	private static final World world = new World(new Vec2(0, 9.8f));
-	private static final Set<Body> bodies = new HashSet<Body>();
+	private final World world = new World(new Vec2(0, 9.8f));
+	private final Set<Body> bodies = new HashSet<Body>();
 
-	private static TrueTypeFont font;
+	private TrueTypeFont font;
 
-	private static void render() {
-		glClear(GL_COLOR_BUFFER_BIT);
-		for (Body body : bodies) {
-			if (body.getType() == BodyType.DYNAMIC) {
-				Color.red.bind();
-				glPushMatrix();
-				Vec2 bodyPosition = body.getPosition().mul(30);
-				glTranslatef(bodyPosition.x, bodyPosition.y, 0);
-				glRotated(Math.toDegrees(body.getAngle()), 0, 0, 1);
-				glRectf(-0.75f * 30, -0.75f * 30, 0.75f * 30, 0.75f * 30);
-				glPopMatrix();
-				font.drawString(0, 0, "Position: " + body.getPosition(), org.newdawn.slick.Color.yellow);
-			}
+	public static void main(String[] args) {
+
+		TestJbox testJbox = new TestJbox();
+		testJbox.start();
+	}
+
+	public void start() {
+		initGL();
+		initFonts();
+		setUpObjects();
+
+		while (!Display.isCloseRequested()) {
+			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+			render();
+			input();
+			logic();
+
+			Display.update();
+			Display.sync(60);
 		}
-
-	}
-
-	private static void logic() {
-		world.step(1 / 60f, 8, 3);
-	}
-
-	private static void input() {
-		for (Body body : bodies) {
-			if (body.getType() == BodyType.DYNAMIC) {
-				if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
-					body.applyAngularImpulse(-0.005f);
-				} else if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
-					body.applyAngularImpulse(+0.005f);
-				}
-				if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
-					body.applyForce(new Vec2(0, -4f), body.getPosition());
-				}
-				if (Mouse.isButtonDown(0)) {
-					Vec2 mousePosition = new Vec2(Mouse.getX(), Mouse.getY()).mul(1 / 60f);
-					Vec2 bodyPosition = body.getPosition();
-					Vec2 force = mousePosition.sub(bodyPosition);
-					body.applyForce(force, body.getPosition());
-				}
-			}
-		}
-	}
-
-	private static void cleanUp(boolean asCrash) {
 		Display.destroy();
-		System.exit(asCrash ? 1 : 0);
+		System.exit(0);
 	}
 
-	private static void setUpMatrices() {
+	private void initGL() {
+		try {
+			Display.setDisplayMode(new DisplayMode(WINDOW_DIMENSIONS[0], WINDOW_DIMENSIONS[1]));
+			Display.setTitle(WINDOW_TITLE);
+			Display.setVSyncEnabled(true);
+			Display.create();
+		} catch (LWJGLException e) {
+			e.printStackTrace();
+			System.exit(0);
+		}
+
 		glMatrixMode(GL_PROJECTION);
 
 		glShadeModel(GL11.GL_SMOOTH);
@@ -104,7 +92,60 @@ public class TestJbox {
 		glMatrixMode(GL11.GL_MODELVIEW);
 	}
 
-	private static void setUpObjects() {
+	public void initFonts() {
+		try {
+			InputStream inputStream = ResourceLoader.getResourceAsStream("ubuntu.ttf");
+			Font awtFont = Font.createFont(Font.TRUETYPE_FONT, inputStream);
+			awtFont = awtFont.deriveFont(24f); // set font size
+			font = new TrueTypeFont(awtFont, true);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void render() {
+		for (Body body : bodies) {
+			if (body.getType() == BodyType.DYNAMIC) {
+				Color.red.bind();
+				glPushMatrix();
+				Vec2 bodyPosition = body.getPosition().mul(30);
+				glTranslatef(bodyPosition.x, bodyPosition.y, 0);
+				glRotated(Math.toDegrees(body.getAngle()), 0, 0, 1);
+				glRectf(-0.75f * 30, -0.75f * 30, 0.75f * 30, 0.75f * 30);
+				glPopMatrix();
+				font.drawString(0, 0, "Position: " + body.getPosition(), org.newdawn.slick.Color.yellow);
+				TextureImpl.bindNone();
+			}
+		}
+	}
+
+	private void logic() {
+		world.step(1 / 60f, 8, 3);
+	}
+
+	private void input() {
+		for (Body body : bodies) {
+			if (body.getType() == BodyType.DYNAMIC) {
+				if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
+					body.applyAngularImpulse(-0.005f);
+				} else if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
+					body.applyAngularImpulse(+0.005f);
+				}
+				if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
+					body.applyForce(new Vec2(0, -4f), body.getPosition());
+				}
+				if (Mouse.isButtonDown(0)) {
+					Vec2 mousePosition = new Vec2(Mouse.getX(), Mouse.getY()).mul(1 / 60f);
+					Vec2 bodyPosition = body.getPosition();
+					Vec2 force = mousePosition.sub(bodyPosition);
+					body.applyForce(force, body.getPosition());
+				}
+			}
+		}
+	}
+
+	private void setUpObjects() {
 		BodyDef boxDef = new BodyDef();
 		boxDef.position.set(320 / 30 / 2, 240 / 30 / 2);
 		boxDef.type = BodyType.DYNAMIC;
@@ -179,48 +220,4 @@ public class TestJbox {
 		bodies.add(rightWall);
 	}
 
-	private static void update() {
-		Display.update();
-		Display.sync(100);
-	}
-
-	private static void enterGameLoop() {
-		while (!Display.isCloseRequested()) {
-			render();
-			logic();
-			input();
-			update();
-		}
-	}
-
-	private static void setUpDisplay() {
-		try {
-			Display.setDisplayMode(new DisplayMode(WINDOW_DIMENSIONS[0], WINDOW_DIMENSIONS[1]));
-			Display.setTitle(WINDOW_TITLE);
-			Display.setVSyncEnabled(true);
-			Display.create();
-		} catch (LWJGLException e) {
-			e.printStackTrace();
-			cleanUp(true);
-		}
-
-		// load font from file
-		try {
-			InputStream inputStream = ResourceLoader.getResourceAsStream("ubuntu.ttf");
-			Font awtFont2 = Font.createFont(Font.TRUETYPE_FONT, inputStream);
-			awtFont2 = awtFont2.deriveFont(24f); // set font size
-			font = new TrueTypeFont(awtFont2, true);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public static void main(String[] args) {
-		setUpDisplay();
-		setUpObjects();
-		setUpMatrices();
-		enterGameLoop();
-		cleanUp(true);
-	}
 }
