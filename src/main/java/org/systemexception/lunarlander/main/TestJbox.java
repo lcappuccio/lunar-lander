@@ -47,10 +47,13 @@ public class TestJbox {
 	private static void input() {
 		for (Body body : bodies) {
 			if (body.getType() == BodyType.DYNAMIC) {
-				if (Keyboard.isKeyDown(Keyboard.KEY_A) && !Keyboard.isKeyDown(Keyboard.KEY_D)) {
+				if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
 					body.applyAngularImpulse(+0.01f);
-				} else if (Keyboard.isKeyDown(Keyboard.KEY_D) && !Keyboard.isKeyDown(Keyboard.KEY_A)) {
+				} else if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
 					body.applyAngularImpulse(-0.01f);
+				}
+				if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
+					body.applyLinearImpulse(new Vec2(0, 0.05f), body.getPosition());
 				}
 				if (Mouse.isButtonDown(0)) {
 					Vec2 mousePosition = new Vec2(Mouse.getX(), Mouse.getY()).mul(0.5f).mul(1 / 30f);
