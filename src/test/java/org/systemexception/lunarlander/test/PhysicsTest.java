@@ -1,5 +1,6 @@
 package org.systemexception.lunarlander.test;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.systemexception.lunarlander.model.Physics;
 
@@ -18,6 +19,7 @@ public class PhysicsTest {
 	private Physics sut;
 
 	@Test
+	@Ignore
 	public void run_simulation_physics() {
 		sut = new Physics(100);
 		sut.run();
