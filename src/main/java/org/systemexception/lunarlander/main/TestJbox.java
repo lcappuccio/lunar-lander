@@ -8,7 +8,13 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
+import org.lwjgl.opengl.GL11;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.TrueTypeFont;
+import org.newdawn.slick.util.ResourceLoader;
 
+import java.awt.*;
+import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -21,23 +27,28 @@ import static org.lwjgl.opengl.GL11.*;
 public class TestJbox {
 
 	private static final String WINDOW_TITLE = "Physics in 2D!";
-	private static final int[] WINDOW_DIMENSIONS = {640, 480};
+	private static final int[] WINDOW_DIMENSIONS = {800, 600};
 
 	private static final World world = new World(new Vec2(0, -9.8f));
 	private static final Set<Body> bodies = new HashSet<Body>();
+
+	private static TrueTypeFont font;
 
 	private static void render() {
 		glClear(GL_COLOR_BUFFER_BIT);
 		for (Body body : bodies) {
 			if (body.getType() == BodyType.DYNAMIC) {
+				Color.red.bind();
 				glPushMatrix();
 				Vec2 bodyPosition = body.getPosition().mul(30);
 				glTranslatef(bodyPosition.x, bodyPosition.y, 0);
 				glRotated(Math.toDegrees(body.getAngle()), 0, 0, 1);
 				glRectf(-0.75f * 30, -0.75f * 30, 0.75f * 30, 0.75f * 30);
 				glPopMatrix();
+				font.drawString(0, 0, "Position: " + body.getPosition(), org.newdawn.slick.Color.yellow);
 			}
 		}
+
 	}
 
 	private static void logic() {
@@ -48,15 +59,15 @@ public class TestJbox {
 		for (Body body : bodies) {
 			if (body.getType() == BodyType.DYNAMIC) {
 				if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
-					body.applyAngularImpulse(+0.01f);
+					body.applyAngularImpulse(+0.005f);
 				} else if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
-					body.applyAngularImpulse(-0.01f);
+					body.applyAngularImpulse(-0.005f);
 				}
 				if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
-					body.applyLinearImpulse(new Vec2(0, 0.05f), body.getPosition());
+					body.applyForce(new Vec2(0, 4f), body.getPosition());
 				}
 				if (Mouse.isButtonDown(0)) {
-					Vec2 mousePosition = new Vec2(Mouse.getX(), Mouse.getY()).mul(0.5f).mul(1 / 30f);
+					Vec2 mousePosition = new Vec2(Mouse.getX(), Mouse.getY()).mul(1 / 60f);
 					Vec2 bodyPosition = body.getPosition();
 					Vec2 force = mousePosition.sub(bodyPosition);
 					body.applyForce(force, body.getPosition());
@@ -72,8 +83,25 @@ public class TestJbox {
 
 	private static void setUpMatrices() {
 		glMatrixMode(GL_PROJECTION);
-		glOrtho(0, 320, 0, 240, 1, -1);
-		glMatrixMode(GL_MODELVIEW);
+
+		GL11.glShadeModel(GL11.GL_SMOOTH);
+		GL11.glDisable(GL11.GL_TEXTURE_2D);
+		GL11.glDisable(GL11.GL_DEPTH_TEST);
+		GL11.glDisable(GL11.GL_LIGHTING);
+
+		GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		GL11.glClearDepth(1);
+
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
+		GL11.glViewport(0, 0, Display.getWidth(), Display.getHeight());
+		GL11.glMatrixMode(GL11.GL_MODELVIEW);
+
+		GL11.glMatrixMode(GL11.GL_PROJECTION);
+		GL11.glLoadIdentity();
+		GL11.glOrtho(0,  Display.getWidth(), 0, Display.getHeight(), 1, -1);
+		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 	}
 
 	private static void setUpObjects() {
@@ -107,7 +135,7 @@ public class TestJbox {
 
 	private static void update() {
 		Display.update();
-		Display.sync(60);
+		Display.sync(100);
 	}
 
 	private static void enterGameLoop() {
@@ -123,10 +151,22 @@ public class TestJbox {
 		try {
 			Display.setDisplayMode(new DisplayMode(WINDOW_DIMENSIONS[0], WINDOW_DIMENSIONS[1]));
 			Display.setTitle(WINDOW_TITLE);
+			Display.setVSyncEnabled(true);
 			Display.create();
 		} catch (LWJGLException e) {
 			e.printStackTrace();
 			cleanUp(true);
+		}
+
+		// load font from file
+		try {
+			InputStream inputStream = ResourceLoader.getResourceAsStream("ubuntu.ttf");
+			Font awtFont2 = Font.createFont(Font.TRUETYPE_FONT, inputStream);
+			awtFont2 = awtFont2.deriveFont(24f); // set font size
+			font = new TrueTypeFont(awtFont2, true);
+
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
