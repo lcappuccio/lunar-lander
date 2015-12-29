@@ -11,8 +11,6 @@ import org.newdawn.slick.util.ResourceLoader;
 import java.awt.*;
 import java.io.InputStream;
 
-import static org.lwjgl.opengl.GL11.glRectf;
-
 /**
  * @author leo
  * @date 29/12/15 20:48
@@ -113,7 +111,6 @@ public class FontExample {
 	 */
 	public void render() {
 		Color.white.bind();
-		glRectf(-0.75f * 30, -0.75f * 30, 0.75f * 30, 0.75f * 30);
 		font.drawString(100, 50, "THE LIGHTWEIGHT JAVA GAMES LIBRARY", Color.yellow);
 		font2.drawString(100, 100, "NICE LOOKING FONTS!", Color.green);
 	}
