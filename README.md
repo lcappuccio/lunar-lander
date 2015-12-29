@@ -26,3 +26,4 @@ The native libs should be the same version in the POM (2.9.3), the binaries are 
 
 * [jbox2d](https://github.com/jbox2d/jbox2d) for the physics engine
 * [LWJGL (LightWeight Java Game Library)](http://legacy.lwjgl.org/) for the game engine
+* [Oskar Veerhoek](https://twitter.com/CodingUniverse) for some very good tutorials to quickstart
