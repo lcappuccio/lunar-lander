@@ -127,7 +127,7 @@ public class TestJbox {
 		Body ground = world.createBody(groundDef);
 		FixtureDef groundFixture = new FixtureDef();
 		groundFixture.density = 1;
-		groundFixture.restitution = 0.0f;
+		groundFixture.restitution = 0.5f;
 		groundFixture.friction = 5f;
 		groundFixture.shape = groundShape;
 		ground.createFixture(groundFixture);
@@ -142,7 +142,7 @@ public class TestJbox {
 		Body roof = world.createBody(roofDef);
 		FixtureDef roofFixture = new FixtureDef();
 		roofFixture.density = 1;
-		roofFixture.restitution = 0.0f;
+		roofFixture.restitution = 0.5f;
 		roofFixture.friction = 5f;
 		roofFixture.shape = roofShape;
 		roof.createFixture(roofFixture);
@@ -157,7 +157,7 @@ public class TestJbox {
 		Body leftWall = world.createBody(leftWallDef);
 		FixtureDef leftWallFixture = new FixtureDef();
 		leftWallFixture.density = 1;
-		leftWallFixture.restitution = 0.0f;
+		leftWallFixture.restitution = 0.5f;
 		leftWallFixture.friction = 5f;
 		leftWallFixture.shape = leftWallShape;
 		leftWall.createFixture(leftWallFixture);
@@ -172,7 +172,7 @@ public class TestJbox {
 		Body rightWall = world.createBody(rightWallDef);
 		FixtureDef rightWallFixture = new FixtureDef();
 		rightWallFixture.density = 1;
-		rightWallFixture.restitution = 0.0f;
+		rightWallFixture.restitution = 0.5f;
 		rightWallFixture.friction = 5f;
 		rightWallFixture.shape = rightWallShape;
 		rightWall.createFixture(rightWallFixture);
