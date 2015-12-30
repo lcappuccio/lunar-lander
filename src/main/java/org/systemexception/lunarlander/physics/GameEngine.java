@@ -80,7 +80,7 @@ public class GameEngine {
 
 		// Character Body
 		BodyDef boxDef = new BodyDef();
-		boxDef.position.set(320 / 30 / 2, 240 / 30 / 2);
+		boxDef.position.set(320 / Dimensions.METERS_TO_PIXELS, 240 / Dimensions.METERS_TO_PIXELS);
 		boxDef.type = BodyType.DYNAMIC;
 		PolygonShape boxShape = new PolygonShape();
 		boxShape.setAsBox(Dimensions.BOX_SIZE, Dimensions.BOX_SIZE);

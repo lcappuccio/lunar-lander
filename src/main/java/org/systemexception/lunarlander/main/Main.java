@@ -125,7 +125,7 @@ public class Main {
 		// Draw box head
 		Body boxHead = gameEngine.getBodies().get(BodiesNames.BOX_HEAD);
 		Color.yellow.brighter().bind();
-		Vec2 bodyHeadPosition = boxHead.getPosition().mul(30);
+		Vec2 bodyHeadPosition = boxHead.getPosition().mul(Dimensions.METERS_TO_PIXELS);
 		glPushMatrix();
 		glTranslatef((float) (bodyHeadPosition.x + Math.sin(box.getAngle()) * Dimensions.METERS_TO_PIXELS),
 				(float) (bodyHeadPosition.y - Math.cos(-box.getAngle()) * Dimensions.METERS_TO_PIXELS), 0);
