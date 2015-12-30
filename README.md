@@ -13,12 +13,23 @@ Lunar Lander, a [classic 1979 game](https://en.wikipedia.org/wiki/Lunar_Lander_%
 [![Build Status](https://travis-ci.org/lcappuccio/lunar-lander.svg?branch=develop)](https://travis-ci.org/lcappuccio/lunar-lander)
 [![codecov.io](https://codecov.io/github/lcappuccio/lunar-lander/coverage.svg?branch=develop)](https://codecov.io/github/lcappuccio/lunar-lander?branch=develop)
 
-# Installation
+# Compiling and Running
+
+## Compile
 
 Download [LWJGL 2.9.3](http://legacy.lwjgl.org/) and copy to a library folder inside the project.
-To launch the program append to the JVM parameter:
 
-`java -jar $lunar-lander.jar -Djava.library.path="path/to/native/libs"`
+`mvn clean compile assembly:single`
+
+## Install
+
+After compilation the runnable jar will be in `$project_home/target` along with the natives folder.
+
+`java -jar lunar-lander_$VERSION.jar -Djava.library.path="natives/"`
+
+## IntelliJ, Netbeans, Eclipse
+
+To run the main class append `-Djava.library.path="natives/"` as JVM parameter.
 
 
 **NOTE**
