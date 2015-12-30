@@ -18,7 +18,7 @@ Lunar Lander, a [classic 1979 game](https://en.wikipedia.org/wiki/Lunar_Lander_%
 Download [LWJGL 2.9.3](http://legacy.lwjgl.org/) and copy to a library folder inside the project.
 To launch the program append to the JVM parameter:
 
-`-Djava.library.path="path/to/native/libs"`
+`java -jar $lunar-lander.jar -Djava.library.path="path/to/native/libs"`
 
 
 **NOTE**
