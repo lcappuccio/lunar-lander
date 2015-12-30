@@ -7,6 +7,8 @@ import org.jbox2d.dynamics.joints.Joint;
 import org.jbox2d.dynamics.joints.WeldJointDef;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+import org.newdawn.slick.openal.Audio;
+import org.newdawn.slick.openal.SoundStore;
 import org.systemexception.lunarlander.constants.BodiesNames;
 import org.systemexception.lunarlander.constants.GamePhysics;
 
@@ -20,24 +22,45 @@ import java.util.UUID;
 public class GameEngine {
 
 	private final World world = new World(new Vec2(0, GamePhysics.GRAVITY));
-
 	private final HashMap<Object, Body> bodies = new HashMap<>();
+	private final Audio soundThruster, soundRCS;
+
+
+	public GameEngine(Audio soundThruster, Audio soundRCS) {
+		this.soundThruster = soundThruster;
+		this.soundRCS = soundRCS;
+	}
+
+	public HashMap<Object, Body> getBodies() {
+		return bodies;
+	}
 
 	public void logic() {
+		input();
 		world.step(1 / 60f, 8, 3);
 	}
 
-	public void input() {
+	private void input() {
 		Body box = bodies.get(BodiesNames.BOX_BODY);
 		if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
 			box.applyAngularImpulse(-GamePhysics.RCS_THRUST);
+			if (!soundRCS.isPlaying()) {
+				soundRCS.playAsSoundEffect(1, 0.5f, false);
+			}
 		} else if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
 			box.applyAngularImpulse(GamePhysics.RCS_THRUST);
-		}
+			if (!soundRCS.isPlaying()) {
+				soundRCS.playAsSoundEffect(1, 0.5f, false);
+			}		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
 			float verticalThrust = (float) (GamePhysics.THRUST * Math.sin(box.getAngle()));
 			float horizontalThrust = (float) (-GamePhysics.THRUST * Math.cos(box.getAngle()));
 			box.applyForce(new Vec2(verticalThrust, horizontalThrust), box.getPosition());
+			if (!soundThruster.isPlaying()) {
+				soundThruster.playAsSoundEffect(1.0f, 1.0f, false);
+			}
+		} else {
+			soundThruster.stop();
 		}
 		if (Mouse.isButtonDown(0)) {
 			Vec2 mousePosition = new Vec2(Mouse.getX(), Mouse.getY()).mul(1 / 60f);
@@ -45,6 +68,7 @@ public class GameEngine {
 			Vec2 force = mousePosition.sub(bodyPosition);
 			box.applyForce(force, box.getPosition());
 		}
+		SoundStore.get().poll(0);
 	}
 
 	public void setUpObjects() {
@@ -144,7 +168,4 @@ public class GameEngine {
 		bodies.put(UUID.randomUUID(), ground);
 	}
 
-	public HashMap<Object, Body> getBodies() {
-		return bodies;
-	}
 }

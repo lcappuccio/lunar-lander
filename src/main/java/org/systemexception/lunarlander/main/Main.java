@@ -7,12 +7,15 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.TrueTypeFont;
+import org.newdawn.slick.openal.Audio;
+import org.newdawn.slick.openal.AudioLoader;
 import org.newdawn.slick.opengl.TextureImpl;
 import org.newdawn.slick.util.ResourceLoader;
 import org.systemexception.lunarlander.constants.BodiesNames;
 import org.systemexception.lunarlander.physics.GameEngine;
 
 import java.awt.*;
+import java.io.IOException;
 import java.io.InputStream;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -29,24 +32,25 @@ public class Main {
 	private final static double TWO_PI = 2 * Math.PI;
 
 	private TrueTypeFont font;
+	private static Audio soundThruster;
+	private static Audio soundRCS;
 	private static GameEngine gameEngine;
 
 	public static void main(String[] args) {
 
 		Main main = new Main();
-		gameEngine = new GameEngine();
 		main.start();
 	}
 
 	private void start() {
 		initGL();
-		initFonts();
+		initResources();
+		gameEngine = new GameEngine(soundThruster, soundRCS);
 		gameEngine.setUpObjects();
 
 		while (!Display.isCloseRequested()) {
 			glClear(GL_COLOR_BUFFER_BIT);
 			render();
-			gameEngine.input();
 			gameEngine.logic();
 
 			Display.update();
@@ -87,14 +91,18 @@ public class Main {
 		glMatrixMode(GL_MODELVIEW);
 	}
 
-	private void initFonts() {
+	private void initResources() {
 		try {
+			// Font
 			InputStream inputStream = ResourceLoader.getResourceAsStream("ubuntu.ttf");
 			Font awtFont = Font.createFont(Font.TRUETYPE_FONT, inputStream);
 			awtFont = awtFont.deriveFont(24f); // set font size
 			font = new TrueTypeFont(awtFont, true);
 
-		} catch (Exception e) {
+			// Audio
+			soundThruster = AudioLoader.getAudio("OGG", ResourceLoader.getResourceAsStream("thruster.ogg"));
+			soundRCS = AudioLoader.getAudio("OGG", ResourceLoader.getResourceAsStream("rcs.ogg"));
+		} catch (IOException | FontFormatException e) {
 			e.printStackTrace();
 		}
 	}
