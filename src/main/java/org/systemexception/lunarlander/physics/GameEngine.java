@@ -9,7 +9,7 @@ import org.lwjgl.input.Keyboard;
 import org.newdawn.slick.openal.Audio;
 import org.newdawn.slick.openal.SoundStore;
 import org.systemexception.lunarlander.constants.BodiesNames;
-import org.systemexception.lunarlander.constants.GamePhysics;
+import org.systemexception.lunarlander.constants.Dimensions;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -20,10 +20,10 @@ import java.util.UUID;
  */
 public class GameEngine {
 
-	private final World world = new World(new Vec2(0, GamePhysics.GRAVITY));
+	private final World world = new World(new Vec2(0, Dimensions.GRAVITY));
 	private final HashMap<Object, Body> bodies = new HashMap<>();
 	private final Audio soundThruster, soundRCS_LEFT, soundRCS_RIGHT;
-	
+
 	public GameEngine(Audio soundThruster, Audio soundRCS) {
 		this.soundThruster = soundThruster;
 		this.soundRCS_LEFT = soundRCS;
@@ -50,19 +50,19 @@ public class GameEngine {
 	private void input() {
 		Body box = bodies.get(BodiesNames.BOX_BODY);
 		if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
-			box.applyAngularImpulse(-GamePhysics.RCS_THRUST);
+			box.applyAngularImpulse(-Dimensions.RCS_THRUST);
 			if (!soundRCS_LEFT.isPlaying()) {
 				soundRCS_LEFT.playAsSoundEffect(1, 0.5f, false);
 			}
 		} else if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
-			box.applyAngularImpulse(GamePhysics.RCS_THRUST);
+			box.applyAngularImpulse(Dimensions.RCS_THRUST);
 			if (!soundRCS_RIGHT.isPlaying()) {
 				soundRCS_RIGHT.playAsSoundEffect(1, 0.5f, false);
 			}
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
-			float verticalThrust = (float) (GamePhysics.THRUST * Math.sin(box.getAngle()));
-			float horizontalThrust = (float) (-GamePhysics.THRUST * Math.cos(box.getAngle()));
+			float verticalThrust = (float) (Dimensions.THRUST * Math.sin(box.getAngle()));
+			float horizontalThrust = (float) (-Dimensions.THRUST * Math.cos(box.getAngle()));
 			box.applyForce(new Vec2(verticalThrust, horizontalThrust), box.getPosition());
 			if (!soundThruster.isPlaying()) {
 				soundThruster.playAsSoundEffect(1.0f, 1.0f, false);
@@ -83,7 +83,7 @@ public class GameEngine {
 		boxDef.position.set(320 / 30 / 2, 240 / 30 / 2);
 		boxDef.type = BodyType.DYNAMIC;
 		PolygonShape boxShape = new PolygonShape();
-		boxShape.setAsBox(0.75f, 0.75f);
+		boxShape.setAsBox(Dimensions.BOX_SIZE, Dimensions.BOX_SIZE);
 		Body box = world.createBody(boxDef);
 		FixtureDef boxFixture = new FixtureDef();
 		boxFixture.density = 10000f;
@@ -97,7 +97,7 @@ public class GameEngine {
 		boxHeadDef.position.set(boxDef.position.x, boxDef.position.y);
 		boxHeadDef.type = BodyType.DYNAMIC;
 		PolygonShape boxHeadShape = new PolygonShape();
-		boxHeadShape.setAsBox(0.02f, 0.02f);
+		boxHeadShape.setAsBox(Dimensions.BOX_HEAD_SIZE, Dimensions.BOX_HEAD_SIZE);
 		Body boxHead = world.createBody(boxHeadDef);
 		FixtureDef boxHeadFixture = new FixtureDef();
 		boxHeadFixture.density = 0.5f;
