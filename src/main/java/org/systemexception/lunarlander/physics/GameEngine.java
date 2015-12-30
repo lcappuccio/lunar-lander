@@ -36,7 +36,9 @@ public class GameEngine {
 	}
 
 	public void logic() {
-		input();
+		if (Keyboard.isCreated()) {
+			input();
+		}
 		world.step(1 / 60f, 8, 3);
 	}
 
