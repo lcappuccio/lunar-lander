@@ -158,7 +158,6 @@ public class TestJbox {
 		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
 			// TODO Verify bugs in thrust application
 			Vec2 vec21 = box.getLinearVelocity();
-			System.out.println(vec21);
 			box.applyForce(new Vec2(box.getAngle(), -2f).sub(vec21), box.getPosition());
 		}
 		if (Mouse.isButtonDown(0)) {
