@@ -1,13 +1,8 @@
 package org.systemexception.lunarlander.main;
 
-import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
-import org.jbox2d.dynamics.*;
-import org.jbox2d.dynamics.joints.Joint;
-import org.jbox2d.dynamics.joints.WeldJointDef;
+import org.jbox2d.dynamics.Body;
 import org.lwjgl.LWJGLException;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
@@ -15,10 +10,11 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.opengl.TextureImpl;
 import org.newdawn.slick.util.ResourceLoader;
+import org.systemexception.lunarlander.constants.BodiesNames;
+import org.systemexception.lunarlander.physics.LunarPhysics;
 
 import java.awt.*;
 import java.io.InputStream;
-import java.util.HashMap;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -31,30 +27,28 @@ public class TestJbox {
 	private static final String WINDOW_TITLE = "Physics in 2D!";
 	private static final int[] WINDOW_DIMENSIONS = {800, 600};
 
-	private final String wall = "WALL", boxBody = "BOX", boxHeadBody = "BOXHEAD";
 	private final static double TWO_PI = 2 * Math.PI;
 
-	private final World world = new World(new Vec2(0, 9.8f));
-	private final HashMap<String, Body> bodies = new HashMap<>();
-
 	private TrueTypeFont font;
+	private static LunarPhysics lunarPhysics;
 
 	public static void main(String[] args) {
 
 		TestJbox testJbox = new TestJbox();
+		lunarPhysics = new LunarPhysics();
 		testJbox.start();
 	}
 
 	public void start() {
 		initGL();
 		initFonts();
-		setUpObjects();
+		lunarPhysics.setUpObjects();
 
 		while (!Display.isCloseRequested()) {
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 			render();
-			input();
-			logic();
+			lunarPhysics.input();
+			lunarPhysics.logic();
 
 			Display.update();
 			Display.sync(60);
@@ -110,7 +104,7 @@ public class TestJbox {
 
 	private void render() {
 		// Draw box
-		Body box = bodies.get(boxBody);
+		Body box = lunarPhysics.getBodies().get(BodiesNames.BOX_BODY);
 		Color.red.bind();
 		glPushMatrix();
 		Vec2 bodyPosition = box.getPosition().mul(30);
@@ -121,7 +115,7 @@ public class TestJbox {
 		font.drawString(0, 0, "Position: " + box.getPosition(), org.newdawn.slick.Color.yellow);
 		TextureImpl.bindNone();
 		// Draw box head
-		Body boxHead = bodies.get(boxHeadBody);
+		Body boxHead = lunarPhysics.getBodies().get(BodiesNames.BOX_HEAD);
 		Color.yellow.brighter().bind();
 		glPushMatrix();
 		glPushMatrix();
@@ -136,134 +130,13 @@ public class TestJbox {
 		glPopMatrix();
 	}
 
-	private void logic() {
-		world.step(1 / 60f, 8, 3);
-	}
-
-	public double normalRelativeAngle(double angle) {
+	private double normalRelativeAngle(double angle) {
 		double v = ((angle %= TWO_PI) >= 0 ? (angle < Math.PI) ? angle : angle - TWO_PI : (angle >= -Math.PI) ? angle :
 				angle + TWO_PI) * (180 / Math.PI);
 		if (v < 0) {
 			return 360 + v;
 		}
 		return v;
-	}
-
-	private void input() {
-		Body box = bodies.get(boxBody);
-		if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
-			box.applyAngularImpulse(-0.005f);
-		} else if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
-			box.applyAngularImpulse(+0.005f);
-		}
-		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
-			// TODO Verify bugs in thrust application
-			Vec2 vec21 = box.getLinearVelocity();
-			box.applyForce(new Vec2(box.getAngle(), -2f).sub(vec21), box.getPosition());
-		}
-		if (Mouse.isButtonDown(0)) {
-			Vec2 mousePosition = new Vec2(Mouse.getX(), Mouse.getY()).mul(1 / 60f);
-			Vec2 bodyPosition = box.getPosition();
-			Vec2 force = mousePosition.sub(bodyPosition);
-			box.applyForce(force, box.getPosition());
-		}
-	}
-
-	private void setUpObjects() {
-
-		// Character Body
-		BodyDef boxDef = new BodyDef();
-		boxDef.position.set(320 / 30 / 2, 240 / 30 / 2);
-		boxDef.type = BodyType.DYNAMIC;
-		PolygonShape boxShape = new PolygonShape();
-		boxShape.setAsBox(0.75f, 0.75f);
-		Body box = world.createBody(boxDef);
-		FixtureDef boxFixture = new FixtureDef();
-		boxFixture.density = 0.1f;
-		boxFixture.shape = boxShape;
-		boxFixture.restitution = 0.5f;
-		box.createFixture(boxFixture);
-		bodies.put(boxBody, box);
-
-		// Character "head"
-		BodyDef boxHeadDef = new BodyDef();
-		boxHeadDef.position.set(boxDef.position.x, boxDef.position.y);
-		boxHeadDef.type = BodyType.DYNAMIC;
-		PolygonShape boxHeadShape = new PolygonShape();
-		boxHeadShape.setAsBox(0.02f, 0.02f);
-		Body boxHead = world.createBody(boxHeadDef);
-		FixtureDef boxHeadFixture = new FixtureDef();
-		boxHeadFixture.density = 0.02f;
-		boxHeadFixture.shape = boxHeadShape;
-		boxHeadFixture.restitution = 0.05f;
-		boxHead.createFixture(boxHeadFixture);
-		bodies.put(boxHeadBody, boxHead);
-
-		WeldJointDef jointDef = new WeldJointDef();
-		jointDef.collideConnected = false;
-		jointDef.bodyA = box;
-		jointDef.bodyB = boxHead;
-		Joint joint = world.createJoint(jointDef);
-
-		// Bottom Wall
-		BodyDef groundDef = new BodyDef();
-		groundDef.position.set(0, 20);
-		groundDef.type = BodyType.STATIC;
-		PolygonShape groundShape = new PolygonShape();
-		groundShape.setAsBox(1000, 0);
-		Body ground = world.createBody(groundDef);
-		FixtureDef groundFixture = new FixtureDef();
-		groundFixture.density = 1;
-		groundFixture.restitution = 0.5f;
-		groundFixture.friction = 5f;
-		groundFixture.shape = groundShape;
-		ground.createFixture(groundFixture);
-		bodies.put(wall.concat("1"), ground);
-
-		// Top Wall
-		BodyDef roofDef = new BodyDef();
-		roofDef.position.set(0, 0);
-		roofDef.type = BodyType.STATIC;
-		PolygonShape roofShape = new PolygonShape();
-		roofShape.setAsBox(1000, 0);
-		Body roof = world.createBody(roofDef);
-		FixtureDef roofFixture = new FixtureDef();
-		roofFixture.density = 1;
-		roofFixture.restitution = 0.5f;
-		roofFixture.friction = 5f;
-		roofFixture.shape = roofShape;
-		roof.createFixture(roofFixture);
-		bodies.put(wall.concat("2"), roof);
-
-		// Left Wall
-		BodyDef leftWallDef = new BodyDef();
-		leftWallDef.position.set(0, 0);
-		leftWallDef.type = BodyType.STATIC;
-		PolygonShape leftWallShape = new PolygonShape();
-		leftWallShape.setAsBox(0, 1000);
-		Body leftWall = world.createBody(leftWallDef);
-		FixtureDef leftWallFixture = new FixtureDef();
-		leftWallFixture.density = 1;
-		leftWallFixture.restitution = 0.5f;
-		leftWallFixture.friction = 5f;
-		leftWallFixture.shape = leftWallShape;
-		leftWall.createFixture(leftWallFixture);
-		bodies.put(wall.concat("3"), leftWall);
-
-		// Right Wall
-		BodyDef rightWallDef = new BodyDef();
-		rightWallDef.position.set(26.5f, 0);
-		rightWallDef.type = BodyType.STATIC;
-		PolygonShape rightWallShape = new PolygonShape();
-		rightWallShape.setAsBox(0, 1000);
-		Body rightWall = world.createBody(rightWallDef);
-		FixtureDef rightWallFixture = new FixtureDef();
-		rightWallFixture.density = 1;
-		rightWallFixture.restitution = 0.5f;
-		rightWallFixture.friction = 5f;
-		rightWallFixture.shape = rightWallShape;
-		rightWall.createFixture(rightWallFixture);
-		bodies.put(wall.concat("4"), rightWall);
 	}
 
 }
