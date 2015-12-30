@@ -17,7 +17,7 @@ public class GameEngineTest {
 
 	@Before
 	public void setSut() {
-		sut = new GameEngine();
+		sut = new GameEngine(null,null);
 		sut.setUpObjects();
 	}
 
