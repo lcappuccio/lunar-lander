@@ -46,7 +46,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>org.systemexception.lunarlander.main.TestJbox</mainClass>
+							<mainClass>org.systemexception.lunarlander.main.Main</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>

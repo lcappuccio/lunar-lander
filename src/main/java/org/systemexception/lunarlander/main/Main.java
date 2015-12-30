@@ -22,7 +22,7 @@ import static org.lwjgl.opengl.GL11.*;
  * @author leo
  * @date 29/12/15 14:22
  */
-public class TestJbox {
+public class Main {
 
 	private static final String WINDOW_TITLE = "Physics in 2D!";
 	private static final int[] WINDOW_DIMENSIONS = {800, 600};
@@ -34,9 +34,9 @@ public class TestJbox {
 
 	public static void main(String[] args) {
 
-		TestJbox testJbox = new TestJbox();
+		Main main = new Main();
 		gameEngine = new GameEngine();
-		testJbox.start();
+		main.start();
 	}
 
 	private void start() {
