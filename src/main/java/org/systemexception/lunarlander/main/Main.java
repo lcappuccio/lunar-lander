@@ -13,6 +13,7 @@ import org.newdawn.slick.openal.AudioLoader;
 import org.newdawn.slick.opengl.TextureImpl;
 import org.newdawn.slick.util.ResourceLoader;
 import org.systemexception.lunarlander.constants.BodiesNames;
+import org.systemexception.lunarlander.constants.Dimensions;
 import org.systemexception.lunarlander.physics.GameEngine;
 
 import java.awt.*;
@@ -114,32 +115,37 @@ public class Main {
 		Body box = gameEngine.getBodies().get(BodiesNames.BOX_BODY);
 		Color.red.bind();
 		glPushMatrix();
-		Vec2 bodyPosition = box.getPosition().mul(30);
+		Vec2 bodyPosition = box.getPosition().mul(Dimensions.METERS_TO_PIXELS);
 		glTranslatef(bodyPosition.x, bodyPosition.y, 0);
 		glRotated(Math.toDegrees(box.getAngle()), 0, 0, 1);
-		glRectf(-0.75f * 30, -0.75f * 30, 0.75f * 30, 0.75f * 30);
+		float scalarBox = Dimensions.BOX_SIZE * Dimensions.METERS_TO_PIXELS;
+		float scalarHead = Dimensions.BOX_HEAD_SIZE * Dimensions.METERS_TO_PIXELS;
+		glRectf(-scalarBox, -scalarBox, scalarBox, scalarBox);
 		glPopMatrix();
-		int stringPosX = 0;
-		double v = normalRelativeAngle(box.getAngle());
-		Color.white.bind();
-		font.drawString(0, stringPosX, "Angle: " + String.format("%.2f", v) + " deg");
-		font.drawString(0, stringPosX += FONT_SPACER, "Height: " +
-						String.format("%.2f", gameEngine.getBodies().get(BodiesNames.GROUND).getPosition().y
-								- box.getPosition().y) + " m");
-		font.drawString(0, stringPosX += FONT_SPACER, "H_Speed: " +
-				String.format("%.2f", Math.abs(box.getLinearVelocity().x)) + " m/s");
-		font.drawString(0, stringPosX += FONT_SPACER, "V_Speed: " +
-				String.format("%.2f", box.getLinearVelocity().y) + " m/s");
-		TextureImpl.bindNone();
 		// Draw box head
 		Body boxHead = gameEngine.getBodies().get(BodiesNames.BOX_HEAD);
 		Color.yellow.brighter().bind();
+		Vec2 bodyHeadPosition = boxHead.getPosition().mul(Dimensions.METERS_TO_PIXELS);
 		glPushMatrix();
-		glTranslatef((float) (bodyPosition.x + Math.sin(box.getAngle()) * 20f),
-				(float) (bodyPosition.y - Math.cos(-box.getAngle()) * 20f), 0);
-		glRotated(Math.toDegrees(box.getAngle()), 0, 0, 1);
-		glRectf(-0.25f * 30, -0.25f * 30, 0.25f * 30, 0.25f * 30);
+		glTranslatef((float) (bodyHeadPosition.x + Math.sin(box.getAngle()) * Dimensions.METERS_TO_PIXELS),
+				(float) (bodyHeadPosition.y - Math.cos(-box.getAngle()) * Dimensions.METERS_TO_PIXELS), 0);
+		glRotated(Math.toDegrees(boxHead.getAngle()), 0, 0, 1);
+		glRectf(-scalarHead, -scalarHead, scalarHead, scalarHead);
 		glPopMatrix();
+
+		// Dashboard
+		int stringPosX = 0;
+		double v = normalRelativeAngle(boxHead.getAngle());
+		Color.white.bind();
+		font.drawString(0, stringPosX, "Angle: " + String.format("%.2f", v) + " deg");
+		font.drawString(0, stringPosX += FONT_SPACER, "Height: " +
+				String.format("%.2f", gameEngine.getBodies().get(BodiesNames.GROUND).getPosition().y
+						- boxHead.getPosition().y) + " m");
+		font.drawString(0, stringPosX += FONT_SPACER, "H_Speed: " +
+				String.format("%.2f", Math.abs(boxHead.getLinearVelocity().x)) + " m/s");
+		font.drawString(0, stringPosX += FONT_SPACER, "V_Speed: " +
+				String.format("%.2f", boxHead.getLinearVelocity().y) + " m/s");
+		TextureImpl.bindNone();
 	}
 
 	private double normalRelativeAngle(final double angle) {
