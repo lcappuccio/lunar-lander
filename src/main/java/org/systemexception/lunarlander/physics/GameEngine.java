@@ -23,12 +23,13 @@ public class GameEngine {
 
 	private final World world = new World(new Vec2(0, GamePhysics.GRAVITY));
 	private final HashMap<Object, Body> bodies = new HashMap<>();
-	private final Audio soundThruster, soundRCS;
+	private final Audio soundThruster, soundRCS_LEFT, soundRCS_RIGHT;
 
 
 	public GameEngine(Audio soundThruster, Audio soundRCS) {
 		this.soundThruster = soundThruster;
-		this.soundRCS = soundRCS;
+		this.soundRCS_LEFT = soundRCS;
+		this.soundRCS_RIGHT = soundRCS;
 	}
 
 	public HashMap<Object, Body> getBodies() {
@@ -46,13 +47,13 @@ public class GameEngine {
 		Body box = bodies.get(BodiesNames.BOX_BODY);
 		if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
 			box.applyAngularImpulse(-GamePhysics.RCS_THRUST);
-			if (!soundRCS.isPlaying()) {
-				soundRCS.playAsSoundEffect(1, 0.5f, false);
+			if (!soundRCS_LEFT.isPlaying()) {
+				soundRCS_LEFT.playAsSoundEffect(1, 0.5f, false);
 			}
 		} else if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
 			box.applyAngularImpulse(GamePhysics.RCS_THRUST);
-			if (!soundRCS.isPlaying()) {
-				soundRCS.playAsSoundEffect(1, 0.5f, false);
+			if (!soundRCS_RIGHT.isPlaying()) {
+				soundRCS_RIGHT.playAsSoundEffect(1, 0.5f, false);
 			}		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
 			float verticalThrust = (float) (GamePhysics.THRUST * Math.sin(box.getAngle()));
