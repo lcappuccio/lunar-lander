@@ -5,7 +5,6 @@ import org.jbox2d.dynamics.Body;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
-import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.opengl.TextureImpl;
@@ -45,7 +44,7 @@ public class Main {
 		gameEngine.setUpObjects();
 
 		while (!Display.isCloseRequested()) {
-			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+			glClear(GL_COLOR_BUFFER_BIT);
 			render();
 			gameEngine.input();
 			gameEngine.logic();
@@ -70,24 +69,24 @@ public class Main {
 
 		glMatrixMode(GL_PROJECTION);
 
-		glShadeModel(GL11.GL_SMOOTH);
-		glDisable(GL11.GL_TEXTURE_2D);
-		glDisable(GL11.GL_DEPTH_TEST);
-		glDisable(GL11.GL_LIGHTING);
+		glShadeModel(GL_SMOOTH);
+		glDisable(GL_TEXTURE_2D);
+		glDisable(GL_DEPTH_TEST);
+		glDisable(GL_LIGHTING);
 
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		glClearDepth(1);
 
-		glEnable(GL11.GL_BLEND);
-		glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		glViewport(0, 0, Display.getWidth(), Display.getHeight());
-		glMatrixMode(GL11.GL_MODELVIEW);
+		glMatrixMode(GL_MODELVIEW);
 
-		glMatrixMode(GL11.GL_PROJECTION);
+		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		glOrtho(0, Display.getWidth(), Display.getHeight(), 0, 1, -1);
-		glMatrixMode(GL11.GL_MODELVIEW);
+		glMatrixMode(GL_MODELVIEW);
 	}
 
 	private void initFonts() {
@@ -112,7 +111,7 @@ public class Main {
 		glRotated(Math.toDegrees(box.getAngle()), 0, 0, 1);
 		glRectf(-0.75f * 30, -0.75f * 30, 0.75f * 30, 0.75f * 30);
 		glPopMatrix();
-		font.drawString(0, 0, "Position: " + box.getPosition(), org.newdawn.slick.Color.yellow);
+		font.drawString(0, 0, "Position: " + box.getPosition(), Color.yellow);
 		TextureImpl.bindNone();
 		// Draw box head
 		Body boxHead = gameEngine.getBodies().get(BodiesNames.BOX_HEAD);
@@ -120,8 +119,7 @@ public class Main {
 		glPushMatrix();
 		glPushMatrix();
 		double v = normalRelativeAngle(box.getAngle());
-		font.drawString(0, 40, "Angle: " + String.format("%.2f", v) + ", Radians: " + box.getAngle(),
-				org.newdawn.slick.Color.yellow);
+		font.drawString(0, 40, "Angle: " + String.format("%.2f", v) + ", Radians: " + box.getAngle(), Color.yellow);
 		TextureImpl.bindNone();
 		glTranslatef((float) (bodyPosition.x + Math.sin(box.getAngle()) * 20f),
 				(float) (bodyPosition.y - Math.cos(-box.getAngle()) * 20f), 0);
