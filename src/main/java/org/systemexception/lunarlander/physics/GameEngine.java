@@ -8,6 +8,7 @@ import org.jbox2d.dynamics.joints.WeldJointDef;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.systemexception.lunarlander.constants.BodiesNames;
+import org.systemexception.lunarlander.constants.GamePhysics;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -16,9 +17,9 @@ import java.util.UUID;
  * @author leo
  * @date 30/12/15 13:48
  */
-public class LunarPhysics {
+public class GameEngine {
 
-	private final World world = new World(new Vec2(0, 9.8f));
+	private final World world = new World(new Vec2(0, GamePhysics.GRAVITY));
 
 	private final HashMap<Object, Body> bodies = new HashMap<>();
 
@@ -36,7 +37,7 @@ public class LunarPhysics {
 		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
 			// TODO Verify bugs in thrust application
 			Vec2 vec21 = box.getLinearVelocity();
-			box.applyForce(new Vec2(box.getAngle(), -2f).sub(vec21), box.getPosition());
+			box.applyForce(new Vec2(box.getAngle(), GamePhysics.THRUST).sub(vec21), box.getPosition());
 		}
 		if (Mouse.isButtonDown(0)) {
 			Vec2 mousePosition = new Vec2(Mouse.getX(), Mouse.getY()).mul(1 / 60f);

@@ -11,7 +11,7 @@ import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.opengl.TextureImpl;
 import org.newdawn.slick.util.ResourceLoader;
 import org.systemexception.lunarlander.constants.BodiesNames;
-import org.systemexception.lunarlander.physics.LunarPhysics;
+import org.systemexception.lunarlander.physics.GameEngine;
 
 import java.awt.*;
 import java.io.InputStream;
@@ -30,25 +30,25 @@ public class TestJbox {
 	private final static double TWO_PI = 2 * Math.PI;
 
 	private TrueTypeFont font;
-	private static LunarPhysics lunarPhysics;
+	private static GameEngine gameEngine;
 
 	public static void main(String[] args) {
 
 		TestJbox testJbox = new TestJbox();
-		lunarPhysics = new LunarPhysics();
+		gameEngine = new GameEngine();
 		testJbox.start();
 	}
 
-	public void start() {
+	private void start() {
 		initGL();
 		initFonts();
-		lunarPhysics.setUpObjects();
+		gameEngine.setUpObjects();
 
 		while (!Display.isCloseRequested()) {
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 			render();
-			lunarPhysics.input();
-			lunarPhysics.logic();
+			gameEngine.input();
+			gameEngine.logic();
 
 			Display.update();
 			Display.sync(60);
@@ -90,7 +90,7 @@ public class TestJbox {
 		glMatrixMode(GL11.GL_MODELVIEW);
 	}
 
-	public void initFonts() {
+	private void initFonts() {
 		try {
 			InputStream inputStream = ResourceLoader.getResourceAsStream("ubuntu.ttf");
 			Font awtFont = Font.createFont(Font.TRUETYPE_FONT, inputStream);
@@ -104,7 +104,7 @@ public class TestJbox {
 
 	private void render() {
 		// Draw box
-		Body box = lunarPhysics.getBodies().get(BodiesNames.BOX_BODY);
+		Body box = gameEngine.getBodies().get(BodiesNames.BOX_BODY);
 		Color.red.bind();
 		glPushMatrix();
 		Vec2 bodyPosition = box.getPosition().mul(30);
@@ -115,7 +115,7 @@ public class TestJbox {
 		font.drawString(0, 0, "Position: " + box.getPosition(), org.newdawn.slick.Color.yellow);
 		TextureImpl.bindNone();
 		// Draw box head
-		Body boxHead = lunarPhysics.getBodies().get(BodiesNames.BOX_HEAD);
+		Body boxHead = gameEngine.getBodies().get(BodiesNames.BOX_HEAD);
 		Color.yellow.brighter().bind();
 		glPushMatrix();
 		glPushMatrix();
