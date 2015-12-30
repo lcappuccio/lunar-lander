@@ -118,7 +118,7 @@ public class Main {
 		glPushMatrix();
 		glPushMatrix();
 		double v = normalRelativeAngle(box.getAngle());
-		font.drawString(0, 40, "Angle: " + String.format("%.2f", v) + ", Radians: " + box.getAngle(), Color.yellow);
+		font.drawString(0, 40, "Angle: " + String.format("%.2f", v), Color.yellow);
 		TextureImpl.bindNone();
 		glTranslatef((float) (bodyPosition.x + Math.sin(box.getAngle()) * 20f),
 				(float) (bodyPosition.y - Math.cos(-box.getAngle()) * 20f), 0);
