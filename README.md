@@ -15,8 +15,11 @@ Lunar Lander, a [classic 1979 game](https://en.wikipedia.org/wiki/Lunar_Lander_%
 
 # Installation
 
-Download [LWJGL 2.9.4](http://legacy.lwjgl.org/) and copy to a library folder inside the project.
-To launch the program append `-Djava.library path="path/to/native/libs"` as JVM parameter.
+Download [LWJGL 2.9.3](http://legacy.lwjgl.org/) and copy to a library folder inside the project.
+To launch the program append to the JVM parameter:
+
+`java -jar $lunar-lander.jar -Djava.library.path="path/to/native/libs"`
+
 
 **NOTE**
 The native libs should be the same version in the POM (2.9.3), the binaries are included in the project however.
@@ -32,4 +35,3 @@ Use W, A, D keys to rotate and apply thrust.
 * [Oskar Veerhoek](https://twitter.com/CodingUniverse) for some very good tutorials to quickstart
 
 # Known Issues
-Thrust direction is bugged at high gradians
