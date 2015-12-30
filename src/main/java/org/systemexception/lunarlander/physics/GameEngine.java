@@ -23,8 +23,7 @@ public class GameEngine {
 	private final World world = new World(new Vec2(0, GamePhysics.GRAVITY));
 	private final HashMap<Object, Body> bodies = new HashMap<>();
 	private final Audio soundThruster, soundRCS_LEFT, soundRCS_RIGHT;
-
-
+	
 	public GameEngine(Audio soundThruster, Audio soundRCS) {
 		this.soundThruster = soundThruster;
 		this.soundRCS_LEFT = soundRCS;
@@ -35,6 +34,9 @@ public class GameEngine {
 		return bodies;
 	}
 
+	/**
+	 * Checks if any input and performs a "step" in the world for the given time amount.
+	 */
 	public void logic() {
 		if (Keyboard.isCreated()) {
 			input();
@@ -42,6 +44,9 @@ public class GameEngine {
 		world.step(1 / 60f, 8, 3);
 	}
 
+	/**
+	 * Read the input from keyboard, mouse, whatever. If any. Plays sounds accordingly.
+	 */
 	private void input() {
 		Body box = bodies.get(BodiesNames.BOX_BODY);
 		if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
@@ -68,6 +73,9 @@ public class GameEngine {
 		SoundStore.get().poll(0);
 	}
 
+	/**
+	 * Create the objects in the world
+	 */
 	public void setUpObjects() {
 
 		// Character Body
@@ -111,9 +119,21 @@ public class GameEngine {
 		// Left Wall
 		putWall(0, 0, 0, 30, 0, 0, null);
 		// Right Wall
-		putWall(26.5f ,0,0,30,0,0,null);
+		putWall(26.5f, 0, 0, 30, 0, 0, null);
 	}
 
+	/**
+	 * Create a boundary for the world, all coordinates in meters
+	 *
+	 * @param posX the starting X coordinate
+	 * @param posY the starting Y coordinate
+	 * @param sizeX the size on the X axis
+	 * @param sizeY the size on the Y axis
+	 * @param restitution the amount of force returned (bounce)
+	 * @param friction the friction of the object
+	 * @param wallName an identifier for the object, most have random items, ground has a specific element,
+	 *                    see: org.systemexception.lunarlander.constants.BodiesNames#GROUND
+	 */
 	public void putWall(final float posX, final float posY, final float sizeX, final float sizeY,
 	                    final float restitution, final float friction, final Object wallName) {
 		BodyDef bodyDef = new BodyDef();
