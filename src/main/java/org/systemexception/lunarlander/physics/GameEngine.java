@@ -123,7 +123,7 @@ public class GameEngine {
 		groundFixture.friction = 5f;
 		groundFixture.shape = groundShape;
 		ground.createFixture(groundFixture);
-		bodies.put(UUID.randomUUID(), ground);
+		bodies.put(BodiesNames.GROUND, ground);
 
 		// Top Wall
 		BodyDef roofDef = new BodyDef();
