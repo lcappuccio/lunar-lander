@@ -26,7 +26,8 @@ The native libs should be the same version in the POM (2.9.3), the binaries are 
 
 # Usage
 Use W, A, D keys to rotate and apply thrust.
-* World gravity: see `world` field
+
+To change the physic properties edit `org.systemexception.lunarlander.constants.GamePhysics`.
 
 # Credits
 

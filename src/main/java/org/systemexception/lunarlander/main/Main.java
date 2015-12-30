@@ -23,7 +23,7 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class Main {
 
-	private static final String WINDOW_TITLE = "Physics in 2D!";
+	private static final String WINDOW_TITLE = "Lunar Lander";
 	private static final int[] WINDOW_DIMENSIONS = {800, 600};
 
 	private final static double TWO_PI = 2 * Math.PI;
@@ -53,7 +53,6 @@ public class Main {
 			Display.sync(60);
 		}
 		Display.destroy();
-		System.exit(0);
 	}
 
 	private void initGL() {
@@ -128,9 +127,10 @@ public class Main {
 		glPopMatrix();
 	}
 
-	private double normalRelativeAngle(double angle) {
-		double v = ((angle %= TWO_PI) >= 0 ? (angle < Math.PI) ? angle : angle - TWO_PI : (angle >= -Math.PI) ? angle :
-				angle + TWO_PI) * (180 / Math.PI);
+	private double normalRelativeAngle(final double angle) {
+		double tempAngle = angle;
+		double v = ((tempAngle %= TWO_PI) >= 0 ? (tempAngle < Math.PI) ? tempAngle : tempAngle - TWO_PI :
+				(tempAngle >= -Math.PI) ? tempAngle : tempAngle + TWO_PI) * (180 / Math.PI);
 		if (v < 0) {
 			return 360 + v;
 		}

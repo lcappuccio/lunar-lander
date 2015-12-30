@@ -35,8 +35,6 @@ public class GameEngine {
 			box.applyAngularImpulse(+0.005f);
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
-			// TODO Verify bugs in thrust application
-			Vec2 vec21 = box.getLinearVelocity();
 			float verticalThrust = (float) (GamePhysics.THRUST * Math.sin(box.getAngle()));
 			float horizontalThrust = (float) (-GamePhysics.THRUST * Math.cos(box.getAngle()));
 			box.applyForce(new Vec2(verticalThrust, horizontalThrust), box.getPosition());
