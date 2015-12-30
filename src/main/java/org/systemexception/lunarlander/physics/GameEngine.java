@@ -83,16 +83,16 @@ public class GameEngine {
 		jointDef.bodyB = boxHead;
 		Joint joint = world.createJoint(jointDef);
 
-		// Bottom Wall
+		// Ground
 		BodyDef groundDef = new BodyDef();
 		groundDef.position.set(0, 20);
 		groundDef.type = BodyType.STATIC;
 		PolygonShape groundShape = new PolygonShape();
-		groundShape.setAsBox(1000, 0);
+		groundShape.setAsBox(30, 0);
 		Body ground = world.createBody(groundDef);
 		FixtureDef groundFixture = new FixtureDef();
 		groundFixture.density = 1;
-		groundFixture.restitution = 0.5f;
+		groundFixture.restitution = 0;
 		groundFixture.friction = 5f;
 		groundFixture.shape = groundShape;
 		ground.createFixture(groundFixture);
@@ -103,11 +103,11 @@ public class GameEngine {
 		roofDef.position.set(0, 0);
 		roofDef.type = BodyType.STATIC;
 		PolygonShape roofShape = new PolygonShape();
-		roofShape.setAsBox(1000, 0);
+		roofShape.setAsBox(30, 0);
 		Body roof = world.createBody(roofDef);
 		FixtureDef roofFixture = new FixtureDef();
 		roofFixture.density = 1;
-		roofFixture.restitution = 0.5f;
+		roofFixture.restitution = 0;
 		roofFixture.friction = 5f;
 		roofFixture.shape = roofShape;
 		roof.createFixture(roofFixture);
@@ -118,11 +118,11 @@ public class GameEngine {
 		leftWallDef.position.set(0, 0);
 		leftWallDef.type = BodyType.STATIC;
 		PolygonShape leftWallShape = new PolygonShape();
-		leftWallShape.setAsBox(0, 1000);
+		leftWallShape.setAsBox(0, 30);
 		Body leftWall = world.createBody(leftWallDef);
 		FixtureDef leftWallFixture = new FixtureDef();
 		leftWallFixture.density = 1;
-		leftWallFixture.restitution = 0.5f;
+		roofFixture.restitution = 0;
 		leftWallFixture.friction = 5f;
 		leftWallFixture.shape = leftWallShape;
 		leftWall.createFixture(leftWallFixture);
@@ -133,11 +133,11 @@ public class GameEngine {
 		rightWallDef.position.set(26.5f, 0);
 		rightWallDef.type = BodyType.STATIC;
 		PolygonShape rightWallShape = new PolygonShape();
-		rightWallShape.setAsBox(0, 1000);
+		rightWallShape.setAsBox(0, 30);
 		Body rightWall = world.createBody(rightWallDef);
 		FixtureDef rightWallFixture = new FixtureDef();
 		rightWallFixture.density = 1;
-		rightWallFixture.restitution = 0.5f;
+		roofFixture.restitution = 0;
 		rightWallFixture.friction = 5f;
 		rightWallFixture.shape = rightWallShape;
 		rightWall.createFixture(rightWallFixture);
