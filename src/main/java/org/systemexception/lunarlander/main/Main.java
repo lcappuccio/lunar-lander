@@ -121,14 +121,15 @@ public class Main {
 		glPopMatrix();
 		int stringPosX = 0;
 		double v = normalRelativeAngle(box.getAngle());
-		font.drawString(0, stringPosX, "Angle: " + String.format("%.2f", v) + " deg", Color.yellow);
+		Color.white.bind();
+		font.drawString(0, stringPosX, "Angle: " + String.format("%.2f", v) + " deg");
 		font.drawString(0, stringPosX += FONT_SPACER, "Height: " +
 						String.format("%.2f", gameEngine.getBodies().get(BodiesNames.GROUND).getPosition().y
-								- box.getPosition().y) + " m", Color.yellow);
+								- box.getPosition().y) + " m");
 		font.drawString(0, stringPosX += FONT_SPACER, "H_Speed: " +
-				String.format("%.2f", Math.abs(box.getLinearVelocity().x)) + " m/s", Color.yellow);
+				String.format("%.2f", Math.abs(box.getLinearVelocity().x)) + " m/s");
 		font.drawString(0, stringPosX += FONT_SPACER, "V_Speed: " +
-				String.format("%.2f", box.getLinearVelocity().y) + " m/s", Color.yellow);
+				String.format("%.2f", box.getLinearVelocity().y) + " m/s");
 		TextureImpl.bindNone();
 		// Draw box head
 		Body boxHead = gameEngine.getBodies().get(BodiesNames.BOX_HEAD);
