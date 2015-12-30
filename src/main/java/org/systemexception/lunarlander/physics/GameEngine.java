@@ -6,7 +6,6 @@ import org.jbox2d.dynamics.*;
 import org.jbox2d.dynamics.joints.Joint;
 import org.jbox2d.dynamics.joints.WeldJointDef;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 import org.newdawn.slick.openal.Audio;
 import org.newdawn.slick.openal.SoundStore;
 import org.systemexception.lunarlander.constants.BodiesNames;
@@ -64,12 +63,6 @@ public class GameEngine {
 			}
 		} else {
 			soundThruster.stop();
-		}
-		if (Mouse.isButtonDown(0)) {
-			Vec2 mousePosition = new Vec2(Mouse.getX(), Mouse.getY()).mul(1 / 60f);
-			Vec2 bodyPosition = box.getPosition();
-			Vec2 force = mousePosition.sub(bodyPosition);
-			box.applyForce(force, box.getPosition());
 		}
 		SoundStore.get().poll(0);
 	}
