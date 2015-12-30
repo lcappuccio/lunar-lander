@@ -53,7 +53,8 @@ public class GameEngine {
 			box.applyAngularImpulse(GamePhysics.RCS_THRUST);
 			if (!soundRCS_RIGHT.isPlaying()) {
 				soundRCS_RIGHT.playAsSoundEffect(1, 0.5f, false);
-			}		}
+			}
+		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
 			float verticalThrust = (float) (GamePhysics.THRUST * Math.sin(box.getAngle()));
 			float horizontalThrust = (float) (-GamePhysics.THRUST * Math.cos(box.getAngle()));
@@ -104,64 +105,34 @@ public class GameEngine {
 		Joint joint = world.createJoint(jointDef);
 
 		// Ground
-		BodyDef groundDef = new BodyDef();
-		groundDef.position.set(0, 20);
-		groundDef.type = BodyType.STATIC;
-		PolygonShape groundShape = new PolygonShape();
-		groundShape.setAsBox(30, 0);
-		Body ground = world.createBody(groundDef);
-		FixtureDef groundFixture = new FixtureDef();
-		groundFixture.density = 1;
-		groundFixture.restitution = 0;
-		groundFixture.friction = 5f;
-		groundFixture.shape = groundShape;
-		ground.createFixture(groundFixture);
-		bodies.put(BodiesNames.GROUND, ground);
-
+		putWall(0, 20, 30, 0, 0, 5, BodiesNames.GROUND);
 		// Top Wall
-		BodyDef roofDef = new BodyDef();
-		roofDef.position.set(0, 0);
-		roofDef.type = BodyType.STATIC;
-		PolygonShape roofShape = new PolygonShape();
-		roofShape.setAsBox(30, 0);
-		Body roof = world.createBody(roofDef);
-		FixtureDef roofFixture = new FixtureDef();
-		roofFixture.density = 1;
-		roofFixture.restitution = 0;
-		roofFixture.friction = 5f;
-		roofFixture.shape = roofShape;
-		roof.createFixture(roofFixture);
-		bodies.put(UUID.randomUUID(), ground);
-
+		putWall(0, 0, 30, 0, 0, 0, null);
 		// Left Wall
-		BodyDef leftWallDef = new BodyDef();
-		leftWallDef.position.set(0, 0);
-		leftWallDef.type = BodyType.STATIC;
-		PolygonShape leftWallShape = new PolygonShape();
-		leftWallShape.setAsBox(0, 30);
-		Body leftWall = world.createBody(leftWallDef);
-		FixtureDef leftWallFixture = new FixtureDef();
-		leftWallFixture.density = 1;
-		roofFixture.restitution = 0;
-		leftWallFixture.friction = 5f;
-		leftWallFixture.shape = leftWallShape;
-		leftWall.createFixture(leftWallFixture);
-		bodies.put(UUID.randomUUID(), ground);
-
+		putWall(0, 0, 0, 30, 0, 0, null);
 		// Right Wall
-		BodyDef rightWallDef = new BodyDef();
-		rightWallDef.position.set(26.5f, 0);
-		rightWallDef.type = BodyType.STATIC;
-		PolygonShape rightWallShape = new PolygonShape();
-		rightWallShape.setAsBox(0, 30);
-		Body rightWall = world.createBody(rightWallDef);
-		FixtureDef rightWallFixture = new FixtureDef();
-		rightWallFixture.density = 1;
-		roofFixture.restitution = 0;
-		rightWallFixture.friction = 5f;
-		rightWallFixture.shape = rightWallShape;
-		rightWall.createFixture(rightWallFixture);
-		bodies.put(UUID.randomUUID(), ground);
+		putWall(26.5f ,0,0,30,0,0,null);
+	}
+
+	public void putWall(final float posX, final float posY, final float sizeX, final float sizeY,
+	                    final float restitution, final float friction, final Object wallName) {
+		BodyDef bodyDef = new BodyDef();
+		bodyDef.position.set(posX, posY);
+		bodyDef.type = BodyType.STATIC;
+		PolygonShape edgeShape = new PolygonShape();
+		edgeShape.setAsBox(sizeX, sizeY);
+		Body body = world.createBody(bodyDef);
+		FixtureDef fixtureDef = new FixtureDef();
+		fixtureDef.density = 1;
+		fixtureDef.restitution = restitution;
+		fixtureDef.friction = friction;
+		fixtureDef.shape = edgeShape;
+		body.createFixture(fixtureDef);
+		if (null == wallName) {
+			bodies.put(UUID.randomUUID(), body);
+		} else {
+			bodies.put(wallName, body);
+		}
 	}
 
 }
