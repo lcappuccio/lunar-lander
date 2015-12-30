@@ -127,9 +127,10 @@ public class Main {
 		glPopMatrix();
 	}
 
-	private double normalRelativeAngle(double angle) {
-		double v = ((angle %= TWO_PI) >= 0 ? (angle < Math.PI) ? angle : angle - TWO_PI : (angle >= -Math.PI) ? angle :
-				angle + TWO_PI) * (180 / Math.PI);
+	private double normalRelativeAngle(final double angle) {
+		double tempAngle = angle;
+		double v = ((tempAngle %= TWO_PI) >= 0 ? (tempAngle < Math.PI) ? tempAngle : tempAngle - TWO_PI :
+				(tempAngle >= -Math.PI) ? tempAngle : tempAngle + TWO_PI) * (180 / Math.PI);
 		if (v < 0) {
 			return 360 + v;
 		}
