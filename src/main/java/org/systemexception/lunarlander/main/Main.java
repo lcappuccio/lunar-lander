@@ -23,7 +23,7 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class Main {
 
-	private static final String WINDOW_TITLE = "Physics in 2D!";
+	private static final String WINDOW_TITLE = "Lunar Lander";
 	private static final int[] WINDOW_DIMENSIONS = {800, 600};
 
 	private final static double TWO_PI = 2 * Math.PI;
@@ -53,7 +53,6 @@ public class Main {
 			Display.sync(60);
 		}
 		Display.destroy();
-		System.exit(0);
 	}
 
 	private void initGL() {
