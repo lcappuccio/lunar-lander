@@ -3,16 +3,20 @@ package org.systemexception.lunarlander.main;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.lwjgl.LWJGLException;
+import org.lwjgl.openal.AL;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.TrueTypeFont;
+import org.newdawn.slick.openal.Audio;
+import org.newdawn.slick.openal.AudioLoader;
 import org.newdawn.slick.opengl.TextureImpl;
 import org.newdawn.slick.util.ResourceLoader;
 import org.systemexception.lunarlander.constants.BodiesNames;
 import org.systemexception.lunarlander.physics.GameEngine;
 
 import java.awt.*;
+import java.io.IOException;
 import java.io.InputStream;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -25,34 +29,36 @@ public class Main {
 
 	private static final String WINDOW_TITLE = "Lunar Lander";
 	private static final int[] WINDOW_DIMENSIONS = {800, 600};
-
 	private final static double TWO_PI = 2 * Math.PI;
+	private final static float FONT_SIZE = 14, FONT_SPACER = FONT_SIZE + 2;
 
 	private TrueTypeFont font;
+	private static Audio soundThruster;
+	private static Audio soundRCS;
 	private static GameEngine gameEngine;
 
 	public static void main(String[] args) {
 
 		Main main = new Main();
-		gameEngine = new GameEngine();
 		main.start();
 	}
 
 	private void start() {
 		initGL();
-		initFonts();
+		initResources();
+		gameEngine = new GameEngine(soundThruster, soundRCS);
 		gameEngine.setUpObjects();
 
 		while (!Display.isCloseRequested()) {
 			glClear(GL_COLOR_BUFFER_BIT);
 			render();
-			gameEngine.input();
 			gameEngine.logic();
 
 			Display.update();
 			Display.sync(60);
 		}
 		Display.destroy();
+		AL.destroy();
 	}
 
 	private void initGL() {
@@ -63,7 +69,6 @@ public class Main {
 			Display.create();
 		} catch (LWJGLException e) {
 			e.printStackTrace();
-			System.exit(0);
 		}
 
 		glMatrixMode(GL_PROJECTION);
@@ -88,14 +93,18 @@ public class Main {
 		glMatrixMode(GL_MODELVIEW);
 	}
 
-	private void initFonts() {
+	private void initResources() {
 		try {
+			// Font
 			InputStream inputStream = ResourceLoader.getResourceAsStream("ubuntu.ttf");
 			Font awtFont = Font.createFont(Font.TRUETYPE_FONT, inputStream);
-			awtFont = awtFont.deriveFont(24f); // set font size
+			awtFont = awtFont.deriveFont(FONT_SIZE); // set font size
 			font = new TrueTypeFont(awtFont, true);
 
-		} catch (Exception e) {
+			// Audio
+			soundThruster = AudioLoader.getAudio("OGG", ResourceLoader.getResourceAsStream("thruster.ogg"));
+			soundRCS = AudioLoader.getAudio("OGG", ResourceLoader.getResourceAsStream("rcs.ogg"));
+		} catch (IOException | FontFormatException e) {
 			e.printStackTrace();
 		}
 	}
@@ -110,16 +119,22 @@ public class Main {
 		glRotated(Math.toDegrees(box.getAngle()), 0, 0, 1);
 		glRectf(-0.75f * 30, -0.75f * 30, 0.75f * 30, 0.75f * 30);
 		glPopMatrix();
-		font.drawString(0, 0, "Position: " + box.getPosition(), Color.yellow);
+		int stringPosX = 0;
+		double v = normalRelativeAngle(box.getAngle());
+		Color.white.bind();
+		font.drawString(0, stringPosX, "Angle: " + String.format("%.2f", v) + " deg");
+		font.drawString(0, stringPosX += FONT_SPACER, "Height: " +
+						String.format("%.2f", gameEngine.getBodies().get(BodiesNames.GROUND).getPosition().y
+								- box.getPosition().y) + " m");
+		font.drawString(0, stringPosX += FONT_SPACER, "H_Speed: " +
+				String.format("%.2f", Math.abs(box.getLinearVelocity().x)) + " m/s");
+		font.drawString(0, stringPosX += FONT_SPACER, "V_Speed: " +
+				String.format("%.2f", box.getLinearVelocity().y) + " m/s");
 		TextureImpl.bindNone();
 		// Draw box head
 		Body boxHead = gameEngine.getBodies().get(BodiesNames.BOX_HEAD);
 		Color.yellow.brighter().bind();
 		glPushMatrix();
-		glPushMatrix();
-		double v = normalRelativeAngle(box.getAngle());
-		font.drawString(0, 40, "Angle: " + String.format("%.2f", v) + ", Radians: " + box.getAngle(), Color.yellow);
-		TextureImpl.bindNone();
 		glTranslatef((float) (bodyPosition.x + Math.sin(box.getAngle()) * 20f),
 				(float) (bodyPosition.y - Math.cos(-box.getAngle()) * 20f), 0);
 		glRotated(Math.toDegrees(box.getAngle()), 0, 0, 1);

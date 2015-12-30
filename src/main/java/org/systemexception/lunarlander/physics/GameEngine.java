@@ -7,6 +7,8 @@ import org.jbox2d.dynamics.joints.Joint;
 import org.jbox2d.dynamics.joints.WeldJointDef;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+import org.newdawn.slick.openal.Audio;
+import org.newdawn.slick.openal.SoundStore;
 import org.systemexception.lunarlander.constants.BodiesNames;
 import org.systemexception.lunarlander.constants.GamePhysics;
 
@@ -20,24 +22,48 @@ import java.util.UUID;
 public class GameEngine {
 
 	private final World world = new World(new Vec2(0, GamePhysics.GRAVITY));
-
 	private final HashMap<Object, Body> bodies = new HashMap<>();
+	private final Audio soundThruster, soundRCS_LEFT, soundRCS_RIGHT;
+
+
+	public GameEngine(Audio soundThruster, Audio soundRCS) {
+		this.soundThruster = soundThruster;
+		this.soundRCS_LEFT = soundRCS;
+		this.soundRCS_RIGHT = soundRCS;
+	}
+
+	public HashMap<Object, Body> getBodies() {
+		return bodies;
+	}
 
 	public void logic() {
+		if (Keyboard.isCreated()) {
+			input();
+		}
 		world.step(1 / 60f, 8, 3);
 	}
 
-	public void input() {
+	private void input() {
 		Body box = bodies.get(BodiesNames.BOX_BODY);
 		if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
-			box.applyAngularImpulse(-0.005f);
+			box.applyAngularImpulse(-GamePhysics.RCS_THRUST);
+			if (!soundRCS_LEFT.isPlaying()) {
+				soundRCS_LEFT.playAsSoundEffect(1, 0.5f, false);
+			}
 		} else if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
-			box.applyAngularImpulse(+0.005f);
-		}
+			box.applyAngularImpulse(GamePhysics.RCS_THRUST);
+			if (!soundRCS_RIGHT.isPlaying()) {
+				soundRCS_RIGHT.playAsSoundEffect(1, 0.5f, false);
+			}		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
 			float verticalThrust = (float) (GamePhysics.THRUST * Math.sin(box.getAngle()));
 			float horizontalThrust = (float) (-GamePhysics.THRUST * Math.cos(box.getAngle()));
 			box.applyForce(new Vec2(verticalThrust, horizontalThrust), box.getPosition());
+			if (!soundThruster.isPlaying()) {
+				soundThruster.playAsSoundEffect(1.0f, 1.0f, false);
+			}
+		} else {
+			soundThruster.stop();
 		}
 		if (Mouse.isButtonDown(0)) {
 			Vec2 mousePosition = new Vec2(Mouse.getX(), Mouse.getY()).mul(1 / 60f);
@@ -45,6 +71,7 @@ public class GameEngine {
 			Vec2 force = mousePosition.sub(bodyPosition);
 			box.applyForce(force, box.getPosition());
 		}
+		SoundStore.get().poll(0);
 	}
 
 	public void setUpObjects() {
@@ -57,7 +84,7 @@ public class GameEngine {
 		boxShape.setAsBox(0.75f, 0.75f);
 		Body box = world.createBody(boxDef);
 		FixtureDef boxFixture = new FixtureDef();
-		boxFixture.density = 0.1f;
+		boxFixture.density = 10000f;
 		boxFixture.shape = boxShape;
 		boxFixture.restitution = 0.5f;
 		box.createFixture(boxFixture);
@@ -71,7 +98,7 @@ public class GameEngine {
 		boxHeadShape.setAsBox(0.02f, 0.02f);
 		Body boxHead = world.createBody(boxHeadDef);
 		FixtureDef boxHeadFixture = new FixtureDef();
-		boxHeadFixture.density = 0.02f;
+		boxHeadFixture.density = 0.5f;
 		boxHeadFixture.shape = boxHeadShape;
 		boxHeadFixture.restitution = 0.05f;
 		boxHead.createFixture(boxHeadFixture);
@@ -83,31 +110,31 @@ public class GameEngine {
 		jointDef.bodyB = boxHead;
 		Joint joint = world.createJoint(jointDef);
 
-		// Bottom Wall
+		// Ground
 		BodyDef groundDef = new BodyDef();
 		groundDef.position.set(0, 20);
 		groundDef.type = BodyType.STATIC;
 		PolygonShape groundShape = new PolygonShape();
-		groundShape.setAsBox(1000, 0);
+		groundShape.setAsBox(30, 0);
 		Body ground = world.createBody(groundDef);
 		FixtureDef groundFixture = new FixtureDef();
 		groundFixture.density = 1;
-		groundFixture.restitution = 0.5f;
+		groundFixture.restitution = 0;
 		groundFixture.friction = 5f;
 		groundFixture.shape = groundShape;
 		ground.createFixture(groundFixture);
-		bodies.put(UUID.randomUUID(), ground);
+		bodies.put(BodiesNames.GROUND, ground);
 
 		// Top Wall
 		BodyDef roofDef = new BodyDef();
 		roofDef.position.set(0, 0);
 		roofDef.type = BodyType.STATIC;
 		PolygonShape roofShape = new PolygonShape();
-		roofShape.setAsBox(1000, 0);
+		roofShape.setAsBox(30, 0);
 		Body roof = world.createBody(roofDef);
 		FixtureDef roofFixture = new FixtureDef();
 		roofFixture.density = 1;
-		roofFixture.restitution = 0.5f;
+		roofFixture.restitution = 0;
 		roofFixture.friction = 5f;
 		roofFixture.shape = roofShape;
 		roof.createFixture(roofFixture);
@@ -118,11 +145,11 @@ public class GameEngine {
 		leftWallDef.position.set(0, 0);
 		leftWallDef.type = BodyType.STATIC;
 		PolygonShape leftWallShape = new PolygonShape();
-		leftWallShape.setAsBox(0, 1000);
+		leftWallShape.setAsBox(0, 30);
 		Body leftWall = world.createBody(leftWallDef);
 		FixtureDef leftWallFixture = new FixtureDef();
 		leftWallFixture.density = 1;
-		leftWallFixture.restitution = 0.5f;
+		roofFixture.restitution = 0;
 		leftWallFixture.friction = 5f;
 		leftWallFixture.shape = leftWallShape;
 		leftWall.createFixture(leftWallFixture);
@@ -133,18 +160,15 @@ public class GameEngine {
 		rightWallDef.position.set(26.5f, 0);
 		rightWallDef.type = BodyType.STATIC;
 		PolygonShape rightWallShape = new PolygonShape();
-		rightWallShape.setAsBox(0, 1000);
+		rightWallShape.setAsBox(0, 30);
 		Body rightWall = world.createBody(rightWallDef);
 		FixtureDef rightWallFixture = new FixtureDef();
 		rightWallFixture.density = 1;
-		rightWallFixture.restitution = 0.5f;
+		roofFixture.restitution = 0;
 		rightWallFixture.friction = 5f;
 		rightWallFixture.shape = rightWallShape;
 		rightWall.createFixture(rightWallFixture);
 		bodies.put(UUID.randomUUID(), ground);
 	}
 
-	public HashMap<Object, Body> getBodies() {
-		return bodies;
-	}
 }
