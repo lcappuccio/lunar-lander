@@ -6,6 +6,5 @@ package org.systemexception.lunarlander.constants;
  */
 public class GamePhysics {
 
-	public final static float GRAVITY = 9.8f;
-	public final static float THRUST = -2f;
+	public final static float GRAVITY = 9.8f, THRUST = 4f;
 }

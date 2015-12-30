@@ -37,7 +37,9 @@ public class GameEngine {
 		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
 			// TODO Verify bugs in thrust application
 			Vec2 vec21 = box.getLinearVelocity();
-			box.applyForce(new Vec2(box.getAngle(), GamePhysics.THRUST).sub(vec21), box.getPosition());
+			float verticalThrust = (float) (GamePhysics.THRUST * Math.sin(box.getAngle()));
+			float horizontalThrust = (float) (-GamePhysics.THRUST * Math.cos(box.getAngle()));
+			box.applyForce(new Vec2(verticalThrust, horizontalThrust), box.getPosition());
 		}
 		if (Mouse.isButtonDown(0)) {
 			Vec2 mousePosition = new Vec2(Mouse.getX(), Mouse.getY()).mul(1 / 60f);
