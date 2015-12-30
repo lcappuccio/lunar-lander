@@ -63,7 +63,6 @@ public class Main {
 			Display.create();
 		} catch (LWJGLException e) {
 			e.printStackTrace();
-			System.exit(0);
 		}
 
 		glMatrixMode(GL_PROJECTION);
