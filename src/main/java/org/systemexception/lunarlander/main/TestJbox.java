@@ -3,6 +3,8 @@ package org.systemexception.lunarlander.main;
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.*;
+import org.jbox2d.dynamics.joints.Joint;
+import org.jbox2d.dynamics.joints.WeldJointDef;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -16,8 +18,7 @@ import org.newdawn.slick.util.ResourceLoader;
 
 import java.awt.*;
 import java.io.InputStream;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -30,8 +31,11 @@ public class TestJbox {
 	private static final String WINDOW_TITLE = "Physics in 2D!";
 	private static final int[] WINDOW_DIMENSIONS = {800, 600};
 
+	private final String wall = "WALL", boxBody = "BOX", boxHeadBody = "BOXHEAD";
+	private final static double TWO_PI = 2 * Math.PI;
+
 	private final World world = new World(new Vec2(0, 9.8f));
-	private final Set<Body> bodies = new HashSet<Body>();
+	private final HashMap<String, Body> bodies = new HashMap<>();
 
 	private TrueTypeFont font;
 
@@ -105,47 +109,66 @@ public class TestJbox {
 	}
 
 	private void render() {
-		for (Body body : bodies) {
-			if (body.getType() == BodyType.DYNAMIC) {
-				Color.red.bind();
-				glPushMatrix();
-				Vec2 bodyPosition = body.getPosition().mul(30);
-				glTranslatef(bodyPosition.x, bodyPosition.y, 0);
-				glRotated(Math.toDegrees(body.getAngle()), 0, 0, 1);
-				glRectf(-0.75f * 30, -0.75f * 30, 0.75f * 30, 0.75f * 30);
-				glPopMatrix();
-				font.drawString(0, 0, "Position: " + body.getPosition(), org.newdawn.slick.Color.yellow);
-				TextureImpl.bindNone();
-			}
-		}
+		// Draw box
+		Body box = bodies.get(boxBody);
+		Color.red.bind();
+		glPushMatrix();
+		Vec2 bodyPosition = box.getPosition().mul(30);
+		glTranslatef(bodyPosition.x, bodyPosition.y, 0);
+		glRotated(Math.toDegrees(box.getAngle()), 0, 0, 1);
+		glRectf(-0.75f * 30, -0.75f * 30, 0.75f * 30, 0.75f * 30);
+		glPopMatrix();
+		font.drawString(0, 0, "Position: " + box.getPosition(), org.newdawn.slick.Color.yellow);
+		TextureImpl.bindNone();
+		// Draw box head
+		Body boxHead = bodies.get(boxHeadBody);
+		Color.yellow.brighter().bind();
+		glPushMatrix();
+		glPushMatrix();
+		double v = normalRelativeAngle(box.getAngle());
+		font.drawString(0, 40, "Angle: " + String.format("%.2f", v), org.newdawn.slick.Color.yellow);
+		TextureImpl.bindNone();
+		glTranslatef((float) (bodyPosition.x + Math.sin(box.getAngle()) * 20f),
+				(float) (bodyPosition.y - Math.cos(-box.getAngle()) * 20f), 0);
+		glRotated(Math.toDegrees(box.getAngle()), 0, 0, 1);
+		glRectf(-0.25f * 30, -0.25f * 30, 0.25f * 30, 0.25f * 30);
+		glPopMatrix();
 	}
 
 	private void logic() {
 		world.step(1 / 60f, 8, 3);
 	}
 
+	public double normalRelativeAngle(double angle) {
+		double v = ((angle %= TWO_PI) >= 0 ? (angle < Math.PI) ? angle : angle - TWO_PI : (angle >= -Math.PI) ? angle :
+				angle + TWO_PI) * (180 / Math.PI);
+		if (v < 0) {
+			return 360 + v;
+		}
+		return v;
+	}
+
 	private void input() {
-		for (Body body : bodies) {
-			if (body.getType() == BodyType.DYNAMIC) {
-				if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
-					body.applyAngularImpulse(-0.005f);
-				} else if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
-					body.applyAngularImpulse(+0.005f);
-				}
-				if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
-					body.applyForce(new Vec2(0, -4f), body.getPosition());
-				}
-				if (Mouse.isButtonDown(0)) {
-					Vec2 mousePosition = new Vec2(Mouse.getX(), Mouse.getY()).mul(1 / 60f);
-					Vec2 bodyPosition = body.getPosition();
-					Vec2 force = mousePosition.sub(bodyPosition);
-					body.applyForce(force, body.getPosition());
-				}
-			}
+		Body box = bodies.get(boxBody);
+		if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
+			box.applyAngularImpulse(-0.005f);
+		} else if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
+			box.applyAngularImpulse(+0.005f);
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
+			box.applyForce(new Vec2(box.getAngle(), -2f), box.getPosition());
+		}
+		if (Mouse.isButtonDown(0)) {
+			Vec2 mousePosition = new Vec2(Mouse.getX(), Mouse.getY()).mul(1 / 60f);
+			Vec2 bodyPosition = box.getPosition();
+			Vec2 force = mousePosition.sub(bodyPosition);
+			box.applyForce(force, box.getPosition());
 		}
 	}
 
 	private void setUpObjects() {
+
+		// Character Body
 		BodyDef boxDef = new BodyDef();
 		boxDef.position.set(320 / 30 / 2, 240 / 30 / 2);
 		boxDef.type = BodyType.DYNAMIC;
@@ -157,7 +180,27 @@ public class TestJbox {
 		boxFixture.shape = boxShape;
 		boxFixture.restitution = 0.5f;
 		box.createFixture(boxFixture);
-		bodies.add(box);
+		bodies.put(boxBody, box);
+
+		// Character "head"
+		BodyDef boxHeadDef = new BodyDef();
+		boxHeadDef.position.set(boxDef.position.x, boxDef.position.y);
+		boxHeadDef.type = BodyType.DYNAMIC;
+		PolygonShape boxHeadShape = new PolygonShape();
+		boxHeadShape.setAsBox(0.02f, 0.02f);
+		Body boxHead = world.createBody(boxHeadDef);
+		FixtureDef boxHeadFixture = new FixtureDef();
+		boxHeadFixture.density = 0.02f;
+		boxHeadFixture.shape = boxHeadShape;
+		boxHeadFixture.restitution = 0.05f;
+		boxHead.createFixture(boxHeadFixture);
+		bodies.put(boxHeadBody, boxHead);
+
+		WeldJointDef jointDef = new WeldJointDef();
+		jointDef.collideConnected = false;
+		jointDef.bodyA = box;
+		jointDef.bodyB = boxHead;
+		Joint joint = world.createJoint(jointDef);
 
 		// Bottom Wall
 		BodyDef groundDef = new BodyDef();
@@ -172,7 +215,7 @@ public class TestJbox {
 		groundFixture.friction = 5f;
 		groundFixture.shape = groundShape;
 		ground.createFixture(groundFixture);
-		bodies.add(ground);
+		bodies.put(wall.concat("1"), ground);
 
 		// Top Wall
 		BodyDef roofDef = new BodyDef();
@@ -187,7 +230,7 @@ public class TestJbox {
 		roofFixture.friction = 5f;
 		roofFixture.shape = roofShape;
 		roof.createFixture(roofFixture);
-		bodies.add(roof);
+		bodies.put(wall.concat("2"), roof);
 
 		// Left Wall
 		BodyDef leftWallDef = new BodyDef();
@@ -202,7 +245,7 @@ public class TestJbox {
 		leftWallFixture.friction = 5f;
 		leftWallFixture.shape = leftWallShape;
 		leftWall.createFixture(leftWallFixture);
-		bodies.add(leftWall);
+		bodies.put(wall.concat("3"), leftWall);
 
 		// Right Wall
 		BodyDef rightWallDef = new BodyDef();
@@ -217,7 +260,7 @@ public class TestJbox {
 		rightWallFixture.friction = 5f;
 		rightWallFixture.shape = rightWallShape;
 		rightWall.createFixture(rightWallFixture);
-		bodies.add(rightWall);
+		bodies.put(wall.concat("4"), rightWall);
 	}
 
 }
