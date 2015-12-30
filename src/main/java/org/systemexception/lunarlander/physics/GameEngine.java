@@ -30,9 +30,9 @@ public class GameEngine {
 	public void input() {
 		Body box = bodies.get(BodiesNames.BOX_BODY);
 		if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
-			box.applyAngularImpulse(-0.005f);
+			box.applyAngularImpulse(-GamePhysics.RCS_THRUST);
 		} else if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
-			box.applyAngularImpulse(+0.005f);
+			box.applyAngularImpulse(GamePhysics.RCS_THRUST);
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
 			float verticalThrust = (float) (GamePhysics.THRUST * Math.sin(box.getAngle()));
@@ -57,7 +57,7 @@ public class GameEngine {
 		boxShape.setAsBox(0.75f, 0.75f);
 		Body box = world.createBody(boxDef);
 		FixtureDef boxFixture = new FixtureDef();
-		boxFixture.density = 0.1f;
+		boxFixture.density = 10000f;
 		boxFixture.shape = boxShape;
 		boxFixture.restitution = 0.5f;
 		box.createFixture(boxFixture);
@@ -71,7 +71,7 @@ public class GameEngine {
 		boxHeadShape.setAsBox(0.02f, 0.02f);
 		Body boxHead = world.createBody(boxHeadDef);
 		FixtureDef boxHeadFixture = new FixtureDef();
-		boxHeadFixture.density = 0.02f;
+		boxHeadFixture.density = 0.5f;
 		boxHeadFixture.shape = boxHeadShape;
 		boxHeadFixture.restitution = 0.05f;
 		boxHead.createFixture(boxHeadFixture);
