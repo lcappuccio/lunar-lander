@@ -42,7 +42,7 @@ To change the physic properties edit `org.systemexception.lunarlander.constants.
 
 # Credits
 
-* [jbox2d](https://github.com/jbox2d/jbox2d) for the physics engine
+* [jbox2d](https://github.com/jbox2d/jbox2d) for the physics engine, [JavaDoc](https://github.com/TrentCoder/JBox2D_JavaDoc)
 * [LWJGL (LightWeight Java Game Library)](http://legacy.lwjgl.org/) for the game engine
 * [Oskar Veerhoek](https://twitter.com/CodingUniverse) for some very good tutorials to quickstart
 
