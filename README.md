@@ -35,4 +35,3 @@ Use W, A, D keys to rotate and apply thrust.
 * [Oskar Veerhoek](https://twitter.com/CodingUniverse) for some very good tutorials to quickstart
 
 # Known Issues
-* Thrust direction is bugged at high gradians
