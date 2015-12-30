@@ -126,7 +126,8 @@ public class TestJbox {
 		glPushMatrix();
 		glPushMatrix();
 		double v = normalRelativeAngle(box.getAngle());
-		font.drawString(0, 40, "Angle: " + String.format("%.2f", v), org.newdawn.slick.Color.yellow);
+		font.drawString(0, 40, "Angle: " + String.format("%.2f", v) + ", Radians: " + box.getAngle(),
+				org.newdawn.slick.Color.yellow);
 		TextureImpl.bindNone();
 		glTranslatef((float) (bodyPosition.x + Math.sin(box.getAngle()) * 20f),
 				(float) (bodyPosition.y - Math.cos(-box.getAngle()) * 20f), 0);
@@ -251,7 +252,7 @@ public class TestJbox {
 
 		// Right Wall
 		BodyDef rightWallDef = new BodyDef();
-		rightWallDef.position.set(27, 0);
+		rightWallDef.position.set(26.5f, 0);
 		rightWallDef.type = BodyType.STATIC;
 		PolygonShape rightWallShape = new PolygonShape();
 		rightWallShape.setAsBox(0, 1000);
