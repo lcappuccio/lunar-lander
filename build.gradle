@@ -4,7 +4,7 @@ buildscript {
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
     }
 	dependencies {
-		testCompile 'junit:junit:4.12'
+		apply plugin: 'idea'
 	}
 }
 
@@ -48,6 +48,10 @@ project(":core") {
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+	    compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
+	    // Here's what we're adding!
+	    compile "org.mockito:mockito-core:1.+"
+	    compile "junit:junit:4.11+"
     }
 }
 

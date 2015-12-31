@@ -32,7 +32,7 @@ public class GameEngineTest {
 			float y1 = sut.getBodies().get(BodiesNames.BOX_HEAD).getPosition().y;
 			sut.logic();
 			float y2 = sut.getBodies().get(BodiesNames.BOX_HEAD).getPosition().y;
-			assertTrue(y1 < y2);
+			assertTrue(y1 > y2);
 		}
 	}
 

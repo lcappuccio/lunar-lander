@@ -43,7 +43,7 @@ public class LunarLander extends ApplicationAdapter {
 		debugMatrix.scale(Dimensions.METERS_TO_PIXELS, Dimensions.METERS_TO_PIXELS, 1f);
 		debugRenderer = new Box2DDebugRenderer(true, true, true, true, true, true);
 		debugRenderer = new Box2DDebugRenderer();
-		
+
 		font = new BitmapFont();
 		font.setColor(Color.WHITE);
 

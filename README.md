@@ -20,4 +20,6 @@ To change the physic properties edit `org.systemexception.lunarlander.constants.
 
 # Credits
 
+* [libGDX](https://github.com/libGDX/libGDX): cross-platform Java game development framework
+
 # Known Issues
