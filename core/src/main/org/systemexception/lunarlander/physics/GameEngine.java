@@ -86,16 +86,17 @@ public class GameEngine {
 
 		// Character "head"
 		BodyDef boxHeadDef = new BodyDef();
-		boxHeadDef.position.set(boxDef.position.x, boxDef.position.y + 5);
+		boxHeadDef.position.set(boxDef.position.x, boxDef.position.y);
 		boxHeadDef.type = DynamicBody;
 		PolygonShape boxHeadShape = new PolygonShape();
-		boxHeadShape.setAsBox(Dimensions.BOX_HEAD_SIZE, Dimensions.BOX_HEAD_SIZE);
+		boxHeadShape.setAsBox(Dimensions.BOX_HEAD_SIZE, Dimensions.BOX_HEAD_SIZE,
+				new Vector2(0,Dimensions.BOX_HEAD_SIZE + Dimensions.BOX_SIZE),0);
 		Body boxHead = world.createBody(boxHeadDef);
 		FixtureDef boxHeadFixture = new FixtureDef();
 		boxHeadFixture.density = 1f;
 		boxHeadFixture.shape = boxHeadShape;
 		boxHeadFixture.restitution = 0f;
-		boxHead.createFixture(boxHeadFixture);
+		box.createFixture(boxHeadFixture);
 		bodies.put(BodiesNames.BOX_HEAD, boxHead);
 
 		// Pointy polygon
