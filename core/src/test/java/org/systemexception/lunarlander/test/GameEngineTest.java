@@ -23,7 +23,7 @@ public class GameEngineTest {
 
 	@Test
 	public void game_has_all_objects() {
-		assertTrue(6 == sut.getBodies().size());
+		assertTrue(7 == sut.getBodies().size());
 	}
 
 	@Test
