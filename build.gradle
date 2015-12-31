@@ -16,23 +16,12 @@ jacoco {
 	reportsDir = file("$buildDir")
 }
 
-jacocoTestReport {
-	additionalSourceDirs = files(sourceSets.main.allSource.srcDirs)
-	sourceDirectories = files(sourceSets.main.allSource.srcDirs)
-	classDirectories =  files(sourceSets.main.output)
-	reports {
-		xml.enabled true
-		csv.enabled false
-		html.enabled true
-	}
-}
-
-check.dependsOn jacocoTestReport
-
 allprojects {
 	apply plugin: "eclipse"
 	apply plugin: "idea"
 	apply plugin: 'java'
+	apply plugin: 'base'
+	apply plugin: 'jacoco'
 
 	version = '1.0'
 	ext {
@@ -77,3 +66,41 @@ project(":core") {
 tasks.eclipse.doLast {
 	delete ".project"
 }
+
+
+subprojects {
+	apply plugin : "java"
+	dependencies {
+		testCompile 'junit:junit:4.11'
+	}
+	jacocoTestReport {
+		reports {
+			html.enabled = true
+			xml.enabled = true
+			csv.enabled = false
+		}
+	}
+}
+
+task jacocoRootReport(type: JacocoReport) {
+	dependsOn = subprojects.test
+	additionalSourceDirs = files(subprojects.sourceSets.main.allSource.srcDirs)
+	sourceDirectories = files(subprojects.sourceSets.main.allSource.srcDirs)
+	classDirectories = files(subprojects.sourceSets.main.output)
+	executionData = files(subprojects.jacocoTestReport.executionData)
+	reports {
+		html.enabled = true
+		xml.enabled = true
+		csv.enabled = false
+	}
+	onlyIf = {
+		true
+	}
+	doFirst {
+		executionData = files(executionData.findAll {
+			it.exists()
+		})
+	}
+}
+
+check.dependsOn jacocoRootReport

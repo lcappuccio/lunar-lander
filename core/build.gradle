@@ -1,6 +1,3 @@
-apply plugin: "java"
-apply plugin: "jacoco"
-
 sourceCompatibility = 1.8
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
@@ -10,21 +7,20 @@ eclipse.project {
 	name = appName + "-core"
 }
 
-task jacocoRootReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
-	dependsOn = subprojects.test
-	sourceDirectories = files(sourceSets.main.java.srcDirs)
-	executionData = files(sourceSets.main.java.srcDirs)
-	reports {
-		html.enabled = true
-		xml.enabled = true
-		csv.enabled = false
-	}
-}
+//task jacocoTestReport(type: JacocoReport) {
+//	sourceDirectories = files(sourceSets.main.java.srcDirs)
+//	executionData = files(sourceSets.main.java.srcDirs)
+//	reports {
+//		html.enabled = true
+//		xml.enabled = true
+//		csv.enabled = false
+//	}
+//}
 
 test {
 	jacoco {
 		append = false
-		destinationFile = file("$buildDir/../../build/jacoco.exec")
-		classDumpFile = file("$buildDir/../../build/classpathdumps")
+		destinationFile = file("$buildDir/jacoco.exec")
+		classDumpFile = file("$buildDir/classpathdumps")
 	}
 }
