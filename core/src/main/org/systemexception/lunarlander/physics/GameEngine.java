@@ -138,7 +138,7 @@ public class GameEngine {
 	 * @param restitution the amount of force returned (bounce)
 	 * @param friction    the friction of the object
 	 * @param wallName    an identifier for the object, most have random items, ground has a specific element,
-	 *                    see: org.systemexception.lunarlander.constants.BodiesNames#GROUND
+	 *                    see: BodiesNames#GROUND
 	 */
 	public void putWall(final float posX, final float posY, final float sizeX, final float sizeY,
 	                    final float restitution, final float friction, final Object wallName) {
