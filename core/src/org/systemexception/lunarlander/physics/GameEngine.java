@@ -5,14 +5,14 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.physics.box2d.joints.WeldJointDef;
 import org.systemexception.lunarlander.constants.BodiesNames;
 import org.systemexception.lunarlander.constants.Dimensions;
 
 import java.util.HashMap;
 import java.util.UUID;
 
-import static com.badlogic.gdx.physics.box2d.BodyDef.BodyType.*;
+import static com.badlogic.gdx.physics.box2d.BodyDef.BodyType.DynamicBody;
+import static com.badlogic.gdx.physics.box2d.BodyDef.BodyType.StaticBody;
 
 /**
  * @author leo
@@ -40,6 +40,9 @@ public class GameEngine {
 	}
 
 	public void logic() {
+		for (Body body : bodies.values()) {
+			body.setActive(true);
+		}
 		world.step(1 / 60f, 8, 3);
 	}
 
@@ -75,7 +78,7 @@ public class GameEngine {
 		boxShape.setAsBox(Dimensions.BOX_SIZE, Dimensions.BOX_SIZE);
 		Body box = world.createBody(boxDef);
 		FixtureDef boxFixture = new FixtureDef();
-		boxFixture.density = 10000f;
+		boxFixture.density = 2f;
 		boxFixture.shape = boxShape;
 		boxFixture.restitution = 0.5f;
 		box.createFixture(boxFixture);
@@ -83,23 +86,37 @@ public class GameEngine {
 
 		// Character "head"
 		BodyDef boxHeadDef = new BodyDef();
-		boxHeadDef.position.set(boxDef.position.x, boxDef.position.y);
+		boxHeadDef.position.set(boxDef.position.x, boxDef.position.y + 5);
 		boxHeadDef.type = DynamicBody;
 		PolygonShape boxHeadShape = new PolygonShape();
 		boxHeadShape.setAsBox(Dimensions.BOX_HEAD_SIZE, Dimensions.BOX_HEAD_SIZE);
 		Body boxHead = world.createBody(boxHeadDef);
 		FixtureDef boxHeadFixture = new FixtureDef();
-		boxHeadFixture.density = 0.5f;
+		boxHeadFixture.density = 1f;
 		boxHeadFixture.shape = boxHeadShape;
-		boxHeadFixture.restitution = 0.05f;
+		boxHeadFixture.restitution = 0f;
 		boxHead.createFixture(boxHeadFixture);
 		bodies.put(BodiesNames.BOX_HEAD, boxHead);
 
-		WeldJointDef jointDef = new WeldJointDef();
-		jointDef.collideConnected = false;
-		jointDef.bodyA = box;
-		jointDef.bodyB = boxHead;
-		Joint joint = world.createJoint(jointDef);
+		// Pointy polygon
+		BodyDef pointDef = new BodyDef();
+		pointDef.position.set(boxDef.position.x, boxDef.position.y + 10);
+		pointDef.type = DynamicBody;
+		Vector2[] vec2s = new Vector2[5];
+		vec2s[0] = new Vector2(-1, 2);
+		vec2s[1] = new Vector2(-1, 0);
+		vec2s[2] = new Vector2(0, -3);
+		vec2s[3] = new Vector2(1, 0);
+		vec2s[4] = new Vector2(1, 1);
+		PolygonShape shape = new PolygonShape();
+		shape.set(vec2s);
+		Body pointBody = world.createBody(pointDef);
+		FixtureDef fixtureDef = new FixtureDef();
+		fixtureDef.density = 1;
+		fixtureDef.shape = shape;
+		fixtureDef.restitution = 0f;
+		pointBody.createFixture(fixtureDef);
+		bodies.put("BAU", pointBody);
 
 		// Ground Wall
 		putWall(0, 0, 30, 0, 0, 5, BodiesNames.GROUND);
@@ -114,13 +131,13 @@ public class GameEngine {
 	/**
 	 * Create a boundary for the world, all coordinates in meters
 	 *
-	 * @param posX the starting X coordinate
-	 * @param posY the starting Y coordinate
-	 * @param sizeX the size on the X axis
-	 * @param sizeY the size on the Y axis
+	 * @param posX        the starting X coordinate
+	 * @param posY        the starting Y coordinate
+	 * @param sizeX       the size on the X axis
+	 * @param sizeY       the size on the Y axis
 	 * @param restitution the amount of force returned (bounce)
-	 * @param friction the friction of the object
-	 * @param wallName an identifier for the object, most have random items, ground has a specific element,
+	 * @param friction    the friction of the object
+	 * @param wallName    an identifier for the object, most have random items, ground has a specific element,
 	 *                    see: org.systemexception.lunarlander.constants.BodiesNames#GROUND
 	 */
 	public void putWall(final float posX, final float posY, final float sizeX, final float sizeY,

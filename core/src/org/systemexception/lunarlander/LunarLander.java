@@ -40,7 +40,6 @@ public class LunarLander extends ApplicationAdapter {
 		camera.setToOrtho(false);
 
 		debugMatrix = new Matrix4(camera.combined);
-		debugMatrix.scale(Dimensions.METERS_TO_PIXELS, Dimensions.METERS_TO_PIXELS, 1f);
 		debugRenderer = new Box2DDebugRenderer(true, true, true, true, true, true);
 		debugRenderer = new Box2DDebugRenderer();
 
