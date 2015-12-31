@@ -43,18 +43,18 @@ public class GameEngine {
 		world.step(1 / 60f, 8, 3);
 	}
 
-	private void input() {
+	public void input() {
 		Body box = bodies.get(BodiesNames.BOX_BODY);
 		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-			box.applyAngularImpulse(-Dimensions.RCS_THRUST, true);
-			soundRCS_LEFT.play();
-		} else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
 			box.applyAngularImpulse(Dimensions.RCS_THRUST, true);
+			soundRCS_LEFT.play();
+		} else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+			box.applyAngularImpulse(-Dimensions.RCS_THRUST, true);
 			soundRCS_RIGHT.play();
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-			float verticalThrust = (float) (Dimensions.THRUST * Math.sin(box.getAngle()));
-			float horizontalThrust = (float) (-Dimensions.THRUST * Math.cos(box.getAngle()));
+			float verticalThrust = (float) (Dimensions.THRUST * Math.sin(-box.getAngle()));
+			float horizontalThrust = (float) (Dimensions.THRUST * Math.cos(-box.getAngle()));
 			box.applyForce(new Vector2(verticalThrust, horizontalThrust), box.getPosition(), true);
 			soundThruster.play();
 		} else {
@@ -101,14 +101,14 @@ public class GameEngine {
 		jointDef.bodyB = boxHead;
 		Joint joint = world.createJoint(jointDef);
 
-		// Ground
-		putWall(0, 20, 30, 0, 0, 5, BodiesNames.GROUND);
+		// Ground Wall
+		putWall(0, 0, 30, 0, 0, 5, BodiesNames.GROUND);
 		// Top Wall
-		putWall(0, 0, 30, 0, 0, 0, null);
+		putWall(0, 20, 30, 0, 0, 0, null);
 		// Left Wall
-		putWall(0, 0, 0, 30, 0, 0, null);
+		putWall(0, 20, 0, 30, 0, 0, null);
 		// Right Wall
-		putWall(26.5f, 0, 0, 30, 0, 0, null);
+		putWall(26.7f, 0, 0, 30, 0, 0, null);
 	}
 
 	/**
