@@ -24,7 +24,7 @@ task jacocoRootReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
 test {
 	jacoco {
 		append = false
-		destinationFile = file("$buildDir/../../build/jacoco/test.exec")
+		destinationFile = file("$buildDir/../../build/jacoco.exec")
 		classDumpFile = file("$buildDir/../../build/classpathdumps")
 	}
 }
