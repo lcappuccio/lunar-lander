@@ -1,37 +1,35 @@
-buildscript {
-	repositories {
-		mavenCentral()
-		maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-	}
-	dependencies {
-		apply plugin: 'java'
-		apply plugin: 'idea'
-		apply plugin: 'jacoco'
-	}
-
-	jacoco {
-		toolVersion = "0.7.1.201405082137"
-	}
-	test {
-		jacoco {
-			append = false
-			destinationFile = file("$buildDir/jacoco/jacocoTest.exec")
-			classDumpFile = file("$buildDir/jacoco/classpathdumps")
-		}
-	}
-	jacocoTestReport {
-		reports {
-			xml.enabled true
-			csv.enabled false
-			html.enabled true
-		}
-	}
-	check.dependsOn jacocoTestReport
+repositories {
+	mavenCentral()
+	maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 }
+
+dependencies {
+	apply plugin: 'java'
+	apply plugin: 'idea'
+	apply plugin: 'jacoco'
+	testCompile "org.mockito:mockito-core:1.+"
+	testCompile "junit:junit:4.11+"
+}
+
+jacoco {
+	toolVersion = "0.7.1.201405082137"
+	reportsDir = file("$buildDir")
+}
+
+jacocoTestReport {
+	reports {
+		xml.enabled true
+		csv.enabled false
+		html.enabled true
+	}
+}
+
+check.dependsOn jacocoTestReport
 
 allprojects {
 	apply plugin: "eclipse"
 	apply plugin: "idea"
+	apply plugin: 'java'
 
 	version = '1.0'
 	ext {
@@ -51,25 +49,23 @@ allprojects {
 }
 
 project(":desktop") {
-	apply plugin: "java"
 
 	dependencies {
 		compile project(":core")
 		compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
 		compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
 		compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
+		compile "org.mockito:mockito-core:1.+"
+		compile "junit:junit:4.11+"
 	}
 }
 
 project(":core") {
-	apply plugin: "java"
-
 
 	dependencies {
 		compile "com.badlogicgames.gdx:gdx:$gdxVersion"
 		compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
 		compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
-		// Here's what we're adding!
 		compile "org.mockito:mockito-core:1.+"
 		compile "junit:junit:4.11+"
 	}
@@ -77,4 +73,6 @@ project(":core") {
 
 tasks.eclipse.doLast {
 	delete ".project"
+	file("core/build/reports").renameTo(file("build/reports"))
+	file("core/build/test-results").renameTo(file("build/test-results"))
 }
