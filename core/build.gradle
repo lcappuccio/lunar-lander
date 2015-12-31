@@ -7,16 +7,6 @@ eclipse.project {
 	name = appName + "-core"
 }
 
-//task jacocoTestReport(type: JacocoReport) {
-//	sourceDirectories = files(sourceSets.main.java.srcDirs)
-//	executionData = files(sourceSets.main.java.srcDirs)
-//	reports {
-//		html.enabled = true
-//		xml.enabled = true
-//		csv.enabled = false
-//	}
-//}
-
 test {
 	jacoco {
 		append = false
