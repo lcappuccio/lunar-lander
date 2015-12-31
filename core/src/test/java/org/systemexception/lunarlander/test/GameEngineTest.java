@@ -36,9 +36,9 @@ public class GameEngineTest {
 		}
 	}
 
-	@Test
-	public void fail() {
-		assertTrue(false);
-	}
+//	@Test
+//	public void fail() {
+//		assertTrue(false);
+//	}
 
 }
