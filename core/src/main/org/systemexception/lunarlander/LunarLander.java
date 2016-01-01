@@ -15,6 +15,8 @@ import org.systemexception.lunarlander.constants.BodiesNames;
 import org.systemexception.lunarlander.constants.Dimensions;
 import org.systemexception.lunarlander.physics.GameEngine;
 
+import java.util.HashMap;
+
 public class LunarLander extends ApplicationAdapter {
 
 	private OrthographicCamera camera;
@@ -62,8 +64,13 @@ public class LunarLander extends ApplicationAdapter {
 				540);
 		font.draw(batch, "V_Speed: " + String.format("%.2f", body.getLinearVelocity().y) + " m/s", 20, 520);
 		font.draw(batch, "Mass: " + String.format("%.2f", body.getMass()) + " kg", 20, 500);
+		HashMap<String, Object> userData = (HashMap<String, Object>) body.getUserData();
+		font.draw(batch, "G: " +
+				String.format("%.2f", (((float) userData.get("V2") - (float) userData.get("V1"))) / (1/60f))
+				+ " something", 20, 480);
+		font.draw(batch, "Thrust: " + userData.get(BodiesNames.THRUST) + "%", 20, 460);
 		batch.end();
-		gameEngine.input();
+//		gameEngine.input();
 		debugRenderer.render(gameEngine.getWorld(), debugMatrix);
 	}
 

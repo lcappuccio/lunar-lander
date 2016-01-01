@@ -22,6 +22,7 @@ public class GameEngine {
 
 	private final World world = new World(new Vector2(0, Dimensions.GRAVITY), false);
 	private final HashMap<Object, Body> bodies = new HashMap<>();
+	private final HashMap<Object, Object> userData = new HashMap<>();
 	private final Music soundThruster, soundRCS_LEFT, soundRCS_RIGHT;
 
 
@@ -29,6 +30,7 @@ public class GameEngine {
 		this.soundThruster = soundThruster;
 		this.soundRCS_LEFT = soundRCS;
 		this.soundRCS_RIGHT = soundRCS;
+		userData.put(BodiesNames.THRUST, 0);
 	}
 
 	public World getWorld() {
@@ -40,14 +42,29 @@ public class GameEngine {
 	}
 
 	public void logic() {
+		// TODO Test if this is really needed
 		for (Body body : bodies.values()) {
 			body.setActive(true);
 		}
+		input();
+		Body box = bodies.get(BodiesNames.BOX_BODY);
+		userData.put("V1", box.getLinearVelocity().y);
+		int thrustPercent = (int) userData.get(BodiesNames.THRUST);
+		float verticalThrust = (float) (Dimensions.THRUST * Math.sin(-box.getAngle())) * thrustPercent / 100f;
+		float horizontalThrust = (float) (Dimensions.THRUST * Math.cos(-box.getAngle())) * thrustPercent / 100f;
+		box.applyForce(new Vector2(verticalThrust, horizontalThrust), box.getPosition(), true);
+		if (thrustPercent > 0) {
+			soundThruster.play();
+		} else {
+			soundThruster.stop();
+		}
 		world.step(1 / 60f, 8, 3);
+		userData.put("V2", box.getLinearVelocity().y);
 	}
 
 	public void input() {
 		Body box = bodies.get(BodiesNames.BOX_BODY);
+		int thrustPercent = (int) userData.get(BodiesNames.THRUST);
 		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
 			box.applyAngularImpulse(Dimensions.RCS_THRUST, true);
 			if (!soundRCS_LEFT.isPlaying()) {
@@ -59,15 +76,15 @@ public class GameEngine {
 				soundRCS_RIGHT.play();
 			}
 		}
-		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-			float verticalThrust = (float) (Dimensions.THRUST * Math.sin(-box.getAngle()));
-			float horizontalThrust = (float) (Dimensions.THRUST * Math.cos(-box.getAngle()));
-			box.applyForce(new Vector2(verticalThrust, horizontalThrust), box.getPosition(), true);
-			if (!soundThruster.isPlaying()) {
-				soundThruster.play();
+		if (Gdx.input.isKeyPressed(Input.Keys.PERIOD)) {
+			if (thrustPercent < 100) {
+				userData.put(BodiesNames.THRUST, ++thrustPercent);
 			}
-		} else {
-			soundThruster.stop();
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.COMMA)) {
+			if (thrustPercent > 0) {
+				userData.put(BodiesNames.THRUST, --thrustPercent);
+			}
 		}
 	}
 
@@ -89,6 +106,7 @@ public class GameEngine {
 		boxFixture.restitution = 0.5f;
 		box.createFixture(boxFixture);
 		bodies.put(BodiesNames.BOX_BODY, box);
+		box.setUserData(userData);
 
 		// Character "head"
 		BodyDef boxHeadDef = new BodyDef();
