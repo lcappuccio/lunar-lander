@@ -40,8 +40,7 @@ public class LunarLander extends ApplicationAdapter {
 		camera.setToOrtho(false);
 
 		debugMatrix = new Matrix4(camera.combined);
-		debugRenderer = new Box2DDebugRenderer(true, true, true, true, true, true);
-		debugRenderer = new Box2DDebugRenderer();
+		debugRenderer = new Box2DDebugRenderer(true, true, false, true, false, false);
 
 		font = new BitmapFont();
 		font.setColor(Color.WHITE);
