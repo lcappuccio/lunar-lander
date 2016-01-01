@@ -44,7 +44,7 @@ public class GameEngine {
 
 	public void logic() {
 		input();
-		world.step(1 / 60f, 8, 3);
+		world.step(Dimensions.TIME_STEP, 8, 3);
 		Body box = bodies.get(BodiesNames.BOX_BODY);
 		userData.put("V1", box.getLinearVelocity().y);
 		int thrustPercent = (int) userData.get(BodiesNames.THRUST);
@@ -79,7 +79,8 @@ public class GameEngine {
 			if (!soundRCS_LEFT.isPlaying()) {
 				soundRCS_LEFT.play();
 			}
-		} else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.D)) {
 			box.applyAngularImpulse(-Dimensions.RCS_THRUST, true);
 			if (!soundRCS_RIGHT.isPlaying()) {
 				soundRCS_RIGHT.play();

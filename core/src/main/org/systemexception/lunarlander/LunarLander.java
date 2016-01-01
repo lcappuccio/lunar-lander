@@ -14,6 +14,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import org.systemexception.lunarlander.constants.BodiesNames;
 import org.systemexception.lunarlander.constants.Dimensions;
 import org.systemexception.lunarlander.physics.GameEngine;
+import org.systemexception.lunarlander.physics.MathUtils;
 
 import java.util.HashMap;
 
@@ -26,7 +27,6 @@ public class LunarLander extends ApplicationAdapter {
 	private Box2DDebugRenderer debugRenderer;
 	private Matrix4 debugMatrix;
 	private BitmapFont font;
-	private final static double TWO_PI = 2 * Math.PI;
 
 	@Override
 	public void create() {
@@ -57,18 +57,18 @@ public class LunarLander extends ApplicationAdapter {
 				Dimensions.METERS_TO_PIXELS, 0);
 		batch.begin();
 		Body body = gameEngine.getBodies().get(BodiesNames.BOX_BODY);
-		float v = (float) normalRelativeAngle(body.getAngle());
+		float v = (float) MathUtils.normalRelativeAngle(body.getAngle());
 		font.draw(batch, "Angle: " + String.format("%.2f", v) + " deg", 20, 580);
-		font.draw(batch, "Altitude: " + String.format("%.2f", body.getPosition().y) + " m", 20, 560);
-		font.draw(batch, "H_Speed: " + String.format("%.2f", Math.abs(body.getLinearVelocity().x)) + " m/s", 20,
+		font.draw(batch, "Altitude: " + String.format("%.1f", body.getPosition().y) + " m", 20, 560);
+		font.draw(batch, "H_Speed: " + String.format("%.1f", Math.abs(body.getLinearVelocity().x)) + " m/s", 20,
 				540);
-		font.draw(batch, "V_Speed: " + String.format("%.2f", body.getLinearVelocity().y) + " m/s", 20, 520);
-		font.draw(batch, "Mass: " + String.format("%.2f", body.getMass()) + " kg", 20, 500);
+		font.draw(batch, "V_Speed: " + String.format("%.1f", body.getLinearVelocity().y) + " m/s", 20, 520);
+		font.draw(batch, "Mass: " + String.format("%.0f", body.getMass()) + " kg", 20, 500);
 		HashMap<String, Object> userData = (HashMap<String, Object>) body.getUserData();
-		font.draw(batch, "G: " + String.format("%.2f", (((float) userData.get("V2") - (float) userData.get("V1"))) /
-				(1 / 60f)), 20, 480);
+		font.draw(batch, "G: " + String.format("%.2f", MathUtils.calculateAcceleration(body)), 20, 480);
 		font.draw(batch, "Thrust: " + userData.get(BodiesNames.THRUST) + "%", 20, 460);
-		font.draw(batch, "Fuel: " + userData.get(BodiesNames.FUEL_AMOUNT) + " kg", 20, 440);
+		font.draw(batch, "Fuel: " + String.format("%.0f", (float) userData.get(BodiesNames.FUEL_AMOUNT)) + " kg",
+				20, 440);
 		batch.end();
 		debugRenderer.render(gameEngine.getWorld(), debugMatrix);
 	}
@@ -78,13 +78,4 @@ public class LunarLander extends ApplicationAdapter {
 		gameEngine.getWorld().dispose();
 	}
 
-	private double normalRelativeAngle(final double angle) {
-		double tempAngle = angle;
-		double v = ((tempAngle %= TWO_PI) >= 0 ? (tempAngle < Math.PI) ? tempAngle : tempAngle - TWO_PI :
-				(tempAngle >= -Math.PI) ? tempAngle : tempAngle + TWO_PI) * (180 / Math.PI);
-		if (v < 0) {
-			return 360 + v;
-		}
-		return v;
-	}
 }
