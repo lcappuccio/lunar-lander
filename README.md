@@ -17,7 +17,7 @@ Lunar Lander, a [classic 1979 game](https://en.wikipedia.org/wiki/Lunar_Lander_%
 * A, D keys to apply RCS thrusters and rotate
 * comma and period to decrease/increase thrust in DPS (Descent Propulsion System)
 
-To change the physic properties edit `org.systemexception.lunarlander.constants.GamePhysics`.
+To change the physic properties edit `org.systemexception.lunarlander.constants.Dimensions`.
 
 # Credits
 
