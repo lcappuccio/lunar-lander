@@ -51,14 +51,18 @@ public class GameEngine {
 		Body box = bodies.get(BodiesNames.BOX_BODY);
 		userData.put("V1", box.getLinearVelocity().y);
 		int thrustPercent = (int) userData.get(BodiesNames.THRUST);
-		float verticalThrust = (float) (Dimensions.THRUST * Math.sin(-box.getAngle())) * thrustPercent / 100f;
-		float horizontalThrust = (float) (Dimensions.THRUST * Math.cos(-box.getAngle())) * thrustPercent / 100f;
-		box.applyForce(new Vector2(verticalThrust, horizontalThrust), box.getPosition(), true);
-		if (thrustPercent > 0) {
-			userData.put(BodiesNames.FUEL_AMOUNT,
-					(int) userData.get(BodiesNames.FUEL_AMOUNT) - (int) (Dimensions.FUEL_BURN_RATE * thrustPercent /
-							100f));
+		if (thrustPercent > 0 && (float) userData.get(BodiesNames.FUEL_AMOUNT) > 0f) {
+			float remainingFuel = (float) userData.get(BodiesNames.FUEL_AMOUNT) -
+					(Dimensions.FUEL_BURN_RATE * thrustPercent / 100f);
+			userData.put(BodiesNames.FUEL_AMOUNT, remainingFuel);
 			soundThruster.play();
+			float verticalThrust = (float) (Dimensions.THRUST * Math.sin(-box.getAngle())) * thrustPercent / 100f;
+			float horizontalThrust = (float) (Dimensions.THRUST * Math.cos(-box.getAngle())) * thrustPercent / 100f;
+			box.applyForce(new Vector2(verticalThrust, horizontalThrust), box.getPosition(), true);
+			MassData massData = box.getMassData();
+			massData.mass = Dimensions.BOX_HEAD_MASS + Dimensions.BOX_MASS + (float) userData.get(BodiesNames.FUEL_AMOUNT);
+			massData.center.set(box.getLocalCenter());
+			box.setMassData(massData);
 		} else {
 			soundThruster.stop();
 		}
@@ -105,8 +109,8 @@ public class GameEngine {
 		boxShape.setAsBox(Dimensions.BOX_SIZE, Dimensions.BOX_SIZE);
 		Body box = world.createBody(boxDef);
 		FixtureDef boxFixture = new FixtureDef();
-		boxFixture.density = 3800f;
 		boxFixture.shape = boxShape;
+		boxFixture.density = 3800f;
 		boxFixture.restitution = 0.5f;
 		box.createFixture(boxFixture);
 		bodies.put(BodiesNames.BOX_BODY, box);
@@ -126,24 +130,24 @@ public class GameEngine {
 		bodies.put(BodiesNames.BOX_HEAD, boxHead);
 
 		// Pointy polygon
-		BodyDef pointDef = new BodyDef();
-		pointDef.position.set(boxDef.position.x, boxDef.position.y + 10);
-		pointDef.type = DynamicBody;
-		Vector2[] vec2s = new Vector2[5];
-		vec2s[0] = new Vector2(-1, 2);
-		vec2s[1] = new Vector2(-1, 0);
-		vec2s[2] = new Vector2(0, -3);
-		vec2s[3] = new Vector2(1, 0);
-		vec2s[4] = new Vector2(1, 1);
-		PolygonShape shape = new PolygonShape();
-		shape.set(vec2s);
-		Body pointBody = world.createBody(pointDef);
-		FixtureDef fixtureDef = new FixtureDef();
-		fixtureDef.density = 1;
-		fixtureDef.shape = shape;
-		fixtureDef.restitution = 0f;
-		pointBody.createFixture(fixtureDef);
-		bodies.put("BAU", pointBody);
+//		BodyDef pointDef = new BodyDef();
+//		pointDef.position.set(boxDef.position.x, boxDef.position.y + 10);
+//		pointDef.type = DynamicBody;
+//		Vector2[] vec2s = new Vector2[5];
+//		vec2s[0] = new Vector2(-1, 2);
+//		vec2s[1] = new Vector2(-1, 0);
+//		vec2s[2] = new Vector2(0, -3);
+//		vec2s[3] = new Vector2(1, 0);
+//		vec2s[4] = new Vector2(1, 1);
+//		PolygonShape shape = new PolygonShape();
+//		shape.set(vec2s);
+//		Body pointBody = world.createBody(pointDef);
+//		FixtureDef fixtureDef = new FixtureDef();
+//		fixtureDef.density = 1;
+//		fixtureDef.shape = shape;
+//		fixtureDef.restitution = 0f;
+//		pointBody.createFixture(fixtureDef);
+//		bodies.put("BAU", pointBody);
 
 		// Ground Wall
 		putWall(0, 0, 30, 0, 0, 5, BodiesNames.GROUND);
