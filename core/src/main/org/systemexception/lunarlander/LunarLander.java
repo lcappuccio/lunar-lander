@@ -27,7 +27,7 @@ public class LunarLander extends ApplicationAdapter {
 	private Matrix4 debugMatrix;
 	private BitmapFont font;
 	private final static double TWO_PI = 2 * Math.PI;
-	
+
 	@Override
 	public void create() {
 		batch = new PolygonSpriteBatch();
@@ -65,13 +65,11 @@ public class LunarLander extends ApplicationAdapter {
 		font.draw(batch, "V_Speed: " + String.format("%.2f", body.getLinearVelocity().y) + " m/s", 20, 520);
 		font.draw(batch, "Mass: " + String.format("%.2f", body.getMass()) + " kg", 20, 500);
 		HashMap<String, Object> userData = (HashMap<String, Object>) body.getUserData();
-		font.draw(batch, "G: " +
-				String.format("%.2f", (((float) userData.get("V2") - (float) userData.get("V1"))) / (1/60f))
-				+ " something", 20, 480);
+		font.draw(batch, "G: " + String.format("%.2f", (((float) userData.get("V2") - (float) userData.get("V1"))) /
+				(1 / 60f)), 20, 480);
 		font.draw(batch, "Thrust: " + userData.get(BodiesNames.THRUST) + "%", 20, 460);
 		font.draw(batch, "Fuel: " + userData.get(BodiesNames.FUEL_AMOUNT) + " kg", 20, 440);
 		batch.end();
-//		gameEngine.input();
 		debugRenderer.render(gameEngine.getWorld(), debugMatrix);
 	}
 

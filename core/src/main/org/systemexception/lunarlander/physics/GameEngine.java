@@ -43,11 +43,8 @@ public class GameEngine {
 	}
 
 	public void logic() {
-		// TODO Test if this is really needed
-		for (Body body : bodies.values()) {
-			body.setActive(true);
-		}
 		input();
+		world.step(1 / 60f, 8, 3);
 		Body box = bodies.get(BodiesNames.BOX_BODY);
 		userData.put("V1", box.getLinearVelocity().y);
 		int thrustPercent = (int) userData.get(BodiesNames.THRUST);
@@ -55,18 +52,22 @@ public class GameEngine {
 			float remainingFuel = (float) userData.get(BodiesNames.FUEL_AMOUNT) -
 					(Dimensions.FUEL_BURN_RATE * thrustPercent / 100f);
 			userData.put(BodiesNames.FUEL_AMOUNT, remainingFuel);
-			soundThruster.play();
+			if (!soundThruster.isPlaying()) {
+				soundThruster.play();
+			}
 			float verticalThrust = (float) (Dimensions.THRUST * Math.sin(-box.getAngle())) * thrustPercent / 100f;
 			float horizontalThrust = (float) (Dimensions.THRUST * Math.cos(-box.getAngle())) * thrustPercent / 100f;
 			box.applyForce(new Vector2(verticalThrust, horizontalThrust), box.getPosition(), true);
 			MassData massData = box.getMassData();
-			massData.mass = Dimensions.BOX_HEAD_MASS + Dimensions.BOX_MASS + (float) userData.get(BodiesNames.FUEL_AMOUNT);
+			massData.mass = Dimensions.BOX_HEAD_MASS + Dimensions.BOX_MASS + (float) userData.get(BodiesNames
+					.FUEL_AMOUNT);
 			massData.center.set(box.getLocalCenter());
 			box.setMassData(massData);
 		} else {
-			soundThruster.stop();
+			if (soundThruster.isPlaying()) {
+				soundThruster.stop();
+			}
 		}
-		world.step(1 / 60f, 8, 3);
 		userData.put("V2", box.getLinearVelocity().y);
 	}
 
