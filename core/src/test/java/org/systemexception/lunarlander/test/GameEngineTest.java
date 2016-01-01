@@ -97,9 +97,4 @@ public class GameEngineTest {
 		assertTrue(angle1 < angle2);
 	}
 
-//	@Test
-//	public void fail() {
-//		assertTrue(false);
-//	}
-
 }
