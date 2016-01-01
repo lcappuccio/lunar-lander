@@ -24,3 +24,4 @@ To change the physic properties edit `org.systemexception.lunarlander.constants.
 * [libGDX](https://github.com/libGDX/libGDX): cross-platform Java game development framework
 
 # Known Issues
+* In the real LM the thrust was limited to 65% (approx.), we're not applying same limitations.

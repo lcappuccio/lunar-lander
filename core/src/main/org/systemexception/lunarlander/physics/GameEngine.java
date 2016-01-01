@@ -31,6 +31,7 @@ public class GameEngine {
 		this.soundRCS_LEFT = soundRCS;
 		this.soundRCS_RIGHT = soundRCS;
 		userData.put(BodiesNames.THRUST, 0);
+		userData.put(BodiesNames.FUEL_AMOUNT, Dimensions.FUEL_AMOUNT);
 	}
 
 	public World getWorld() {
@@ -54,6 +55,9 @@ public class GameEngine {
 		float horizontalThrust = (float) (Dimensions.THRUST * Math.cos(-box.getAngle())) * thrustPercent / 100f;
 		box.applyForce(new Vector2(verticalThrust, horizontalThrust), box.getPosition(), true);
 		if (thrustPercent > 0) {
+			userData.put(BodiesNames.FUEL_AMOUNT,
+					(int) userData.get(BodiesNames.FUEL_AMOUNT) - (int) (Dimensions.FUEL_BURN_RATE * thrustPercent /
+							100f));
 			soundThruster.play();
 		} else {
 			soundThruster.stop();
@@ -101,7 +105,7 @@ public class GameEngine {
 		boxShape.setAsBox(Dimensions.BOX_SIZE, Dimensions.BOX_SIZE);
 		Body box = world.createBody(boxDef);
 		FixtureDef boxFixture = new FixtureDef();
-		boxFixture.density = 3300f;
+		boxFixture.density = 3800f;
 		boxFixture.shape = boxShape;
 		boxFixture.restitution = 0.5f;
 		box.createFixture(boxFixture);

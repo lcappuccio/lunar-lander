@@ -69,6 +69,7 @@ public class LunarLander extends ApplicationAdapter {
 				String.format("%.2f", (((float) userData.get("V2") - (float) userData.get("V1"))) / (1/60f))
 				+ " something", 20, 480);
 		font.draw(batch, "Thrust: " + userData.get(BodiesNames.THRUST) + "%", 20, 460);
+		font.draw(batch, "Fuel: " + userData.get(BodiesNames.FUEL_AMOUNT) + " kg", 20, 440);
 		batch.end();
 //		gameEngine.input();
 		debugRenderer.render(gameEngine.getWorld(), debugMatrix);
