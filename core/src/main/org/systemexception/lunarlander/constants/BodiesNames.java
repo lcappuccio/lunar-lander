@@ -6,6 +6,6 @@ package org.systemexception.lunarlander.constants;
  */
 public enum BodiesNames {
 
-	BOX_BODY, BOX_HEAD, GROUND, THRUST;
+	BOX_BODY, BOX_HEAD, GROUND, THRUST, FUEL_AMOUNT;
 
 }
