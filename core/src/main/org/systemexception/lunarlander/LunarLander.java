@@ -61,6 +61,7 @@ public class LunarLander extends ApplicationAdapter {
 		font.draw(batch, "H_Speed: " + String.format("%.2f", Math.abs(body.getLinearVelocity().x)) + " m/s", 20,
 				540);
 		font.draw(batch, "V_Speed: " + String.format("%.2f", body.getLinearVelocity().y) + " m/s", 20, 520);
+		font.draw(batch, "Mass: " + String.format("%.2f", body.getMass()) + " kg", 20, 500);
 		batch.end();
 		gameEngine.input();
 		debugRenderer.render(gameEngine.getWorld(), debugMatrix);
