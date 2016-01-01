@@ -2,7 +2,7 @@ package org.systemexception.lunarlander.physics;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import org.systemexception.lunarlander.constants.BodiesNames;
@@ -22,10 +22,10 @@ public class GameEngine {
 
 	private final World world = new World(new Vector2(0, Dimensions.GRAVITY), false);
 	private final HashMap<Object, Body> bodies = new HashMap<>();
-	private final Sound soundThruster, soundRCS_LEFT, soundRCS_RIGHT;
+	private final Music soundThruster, soundRCS_LEFT, soundRCS_RIGHT;
 
 
-	public GameEngine(final Sound soundThruster, final Sound soundRCS) {
+	public GameEngine(final Music soundThruster, final Music soundRCS) {
 		this.soundThruster = soundThruster;
 		this.soundRCS_LEFT = soundRCS;
 		this.soundRCS_RIGHT = soundRCS;
@@ -50,16 +50,22 @@ public class GameEngine {
 		Body box = bodies.get(BodiesNames.BOX_BODY);
 		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
 			box.applyAngularImpulse(Dimensions.RCS_THRUST, true);
-			soundRCS_LEFT.play();
+			if (!soundRCS_LEFT.isPlaying()) {
+				soundRCS_LEFT.play();
+			}
 		} else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
 			box.applyAngularImpulse(-Dimensions.RCS_THRUST, true);
-			soundRCS_RIGHT.play();
+			if (!soundRCS_RIGHT.isPlaying()) {
+				soundRCS_RIGHT.play();
+			}
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
 			float verticalThrust = (float) (Dimensions.THRUST * Math.sin(-box.getAngle()));
 			float horizontalThrust = (float) (Dimensions.THRUST * Math.cos(-box.getAngle()));
 			box.applyForce(new Vector2(verticalThrust, horizontalThrust), box.getPosition(), true);
-			soundThruster.play();
+			if (!soundThruster.isPlaying()) {
+				soundThruster.play();
+			}
 		} else {
 			soundThruster.stop();
 		}
@@ -90,7 +96,7 @@ public class GameEngine {
 		boxHeadDef.type = DynamicBody;
 		PolygonShape boxHeadShape = new PolygonShape();
 		boxHeadShape.setAsBox(Dimensions.BOX_HEAD_SIZE, Dimensions.BOX_HEAD_SIZE,
-				new Vector2(0,Dimensions.BOX_HEAD_SIZE + Dimensions.BOX_SIZE),0);
+				new Vector2(0, Dimensions.BOX_HEAD_SIZE + Dimensions.BOX_SIZE), 0);
 		Body boxHead = world.createBody(boxHeadDef);
 		FixtureDef boxHeadFixture = new FixtureDef();
 		boxHeadFixture.shape = boxHeadShape;

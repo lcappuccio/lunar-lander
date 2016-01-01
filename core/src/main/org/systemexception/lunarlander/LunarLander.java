@@ -2,7 +2,7 @@ package org.systemexception.lunarlander;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -25,14 +25,12 @@ public class LunarLander extends ApplicationAdapter {
 	private Matrix4 debugMatrix;
 	private BitmapFont font;
 	private final static double TWO_PI = 2 * Math.PI;
-
-	private Sound soundThruster, soundRcs;
-
+	
 	@Override
 	public void create() {
 		batch = new PolygonSpriteBatch();
-		soundThruster = Gdx.audio.newSound(Gdx.files.internal("thruster.ogg"));
-		soundRcs = Gdx.audio.newSound(Gdx.files.internal("rcs.ogg"));
+		Music soundThruster = Gdx.audio.newMusic(Gdx.files.internal("thruster.ogg"));
+		Music soundRcs = Gdx.audio.newMusic(Gdx.files.internal("rcs.ogg"));
 		gameEngine = new GameEngine(soundThruster, soundRcs);
 		gameEngine.setUpObjects();
 
