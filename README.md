@@ -14,12 +14,14 @@ Lunar Lander, a [classic 1979 game](https://en.wikipedia.org/wiki/Lunar_Lander_%
 [![codecov.io](https://codecov.io/github/lcappuccio/lunar-lander/coverage.svg?branch=develop)](https://codecov.io/github/lcappuccio/lunar-lander?branch=develop)
 
 # Usage
-Use W, A, D keys to rotate and apply thrust.
+* A, D keys to apply RCS thrusters and rotate
+* comma and period to decrease/increase thrust in DPS (Descent Propulsion System)
 
-To change the physic properties edit `org.systemexception.lunarlander.constants.GamePhysics`.
+To change the physic properties edit `org.systemexception.lunarlander.constants.Dimensions`.
 
 # Credits
 
 * [libGDX](https://github.com/libGDX/libGDX): cross-platform Java game development framework
 
 # Known Issues
+* In the real LM the thrust was limited to 65% (approx.), we're not applying same limitations.

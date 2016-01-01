@@ -9,7 +9,10 @@ public class Dimensions {
 	/**
 	 * All units expressed in Metric System
 	 */
-	public final static float GRAVITY = -1.6f, THRUST = 45000f, RCS_THRUST = 440f;
-	public final static float BOX_SIZE = 1f, BOX_HEAD_SIZE = 0.5f;
-	public final static float METERS_TO_PIXELS = 30f;
+	public final static float GRAVITY = -1.6f,
+			THRUST = 45000f, RCS_THRUST = 440f,
+			BOX_SIZE = 1f, BOX_MASS = 2100f,
+			BOX_HEAD_SIZE = 0.5f, BOX_HEAD_MASS = 4700f,
+			FUEL_BURN_RATE = 5.0f, FUEL_AMOUNT = 8200,
+			METERS_TO_PIXELS = 30f, TIME_STEP = 1 / 60f;
 }
