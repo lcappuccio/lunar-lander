@@ -78,7 +78,7 @@ public class GameEngine {
 		boxShape.setAsBox(Dimensions.BOX_SIZE, Dimensions.BOX_SIZE);
 		Body box = world.createBody(boxDef);
 		FixtureDef boxFixture = new FixtureDef();
-		boxFixture.density = 2f;
+		boxFixture.density = 3300f;
 		boxFixture.shape = boxShape;
 		boxFixture.restitution = 0.5f;
 		box.createFixture(boxFixture);
@@ -93,9 +93,7 @@ public class GameEngine {
 				new Vector2(0,Dimensions.BOX_HEAD_SIZE + Dimensions.BOX_SIZE),0);
 		Body boxHead = world.createBody(boxHeadDef);
 		FixtureDef boxHeadFixture = new FixtureDef();
-		boxHeadFixture.density = 1f;
 		boxHeadFixture.shape = boxHeadShape;
-		boxHeadFixture.restitution = 0f;
 		box.createFixture(boxHeadFixture);
 		bodies.put(BodiesNames.BOX_HEAD, boxHead);
 
