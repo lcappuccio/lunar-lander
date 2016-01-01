@@ -86,15 +86,11 @@ public class GameEngine {
 				soundRCS_RIGHT.play();
 			}
 		}
-		if (Gdx.input.isKeyPressed(Input.Keys.PERIOD)) {
-			if (thrustPercent < 100) {
-				userData.put(BodiesNames.THRUST, ++thrustPercent);
-			}
+		if (Gdx.input.isKeyPressed(Input.Keys.PERIOD) & thrustPercent < 100) {
+			userData.put(BodiesNames.THRUST, ++thrustPercent);
 		}
-		if (Gdx.input.isKeyPressed(Input.Keys.COMMA)) {
-			if (thrustPercent > 0) {
-				userData.put(BodiesNames.THRUST, --thrustPercent);
-			}
+		if (Gdx.input.isKeyPressed(Input.Keys.COMMA) & thrustPercent > 0) {
+			userData.put(BodiesNames.THRUST, --thrustPercent);
 		}
 	}
 
