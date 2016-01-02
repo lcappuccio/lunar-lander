@@ -27,6 +27,12 @@ public class GdxTestRunner extends BlockJUnit4ClassRunner implements Application
 
 	@Override
 	public void create() {
+		synchronized (invokeInRender) {
+			for (Map.Entry<FrameworkMethod, RunNotifier> each : invokeInRender.entrySet()) {
+				super.runChild(each.getKey(), each.getValue());
+			}
+			invokeInRender.clear();
+		}
 	}
 
 	@Override
@@ -35,12 +41,6 @@ public class GdxTestRunner extends BlockJUnit4ClassRunner implements Application
 
 	@Override
 	public void render() {
-		synchronized (invokeInRender) {
-			for (Map.Entry<FrameworkMethod, RunNotifier> each : invokeInRender.entrySet()) {
-				super.runChild(each.getKey(), each.getValue());
-			}
-			invokeInRender.clear();
-		}
 	}
 
 	@Override

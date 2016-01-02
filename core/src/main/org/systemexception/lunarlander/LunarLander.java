@@ -28,6 +28,12 @@ public class LunarLander extends ApplicationAdapter {
 	private Matrix4 debugMatrix;
 	private BitmapFont font;
 
+	public LunarLander(GameEngine gameEngine) {
+		this.gameEngine = gameEngine;
+	}
+
+	public LunarLander() {}
+
 	@Override
 	public void create() {
 		batch = new SpriteBatch();

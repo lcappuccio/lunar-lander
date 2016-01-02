@@ -13,7 +13,6 @@ import java.nio.IntBuffer;
 public class MockGL20 implements GL20 {
 	@Override
 	public void glActiveTexture(int texture) {
-
 	}
 
 	@Override
