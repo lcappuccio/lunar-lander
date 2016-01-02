@@ -69,7 +69,7 @@ tasks.eclipse.doLast {
 
 
 subprojects {
-	apply plugin : "java"
+	apply plugin: "java"
 	dependencies {
 		testCompile 'junit:junit:4.11'
 	}
