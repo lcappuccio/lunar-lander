@@ -45,6 +45,7 @@ project(":desktop") {
 	dependencies {
 		compile project(":core")
 		compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+		compile "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
 		compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
 		compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
 		compile "org.mockito:mockito-core:1.+"
@@ -56,6 +57,8 @@ project(":core") {
 
 	dependencies {
 		compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+		compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+		compile "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
 		compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
 		compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
 		compile "org.mockito:mockito-core:1.+"

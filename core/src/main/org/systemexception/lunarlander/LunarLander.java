@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -23,14 +23,14 @@ public class LunarLander extends ApplicationAdapter {
 	private OrthographicCamera camera;
 	private GameEngine gameEngine;
 
-	private PolygonSpriteBatch batch;
+	private SpriteBatch batch;
 	private Box2DDebugRenderer debugRenderer;
 	private Matrix4 debugMatrix;
 	private BitmapFont font;
 
 	@Override
 	public void create() {
-		batch = new PolygonSpriteBatch();
+		batch = new SpriteBatch();
 		Music soundThruster = Gdx.audio.newMusic(Gdx.files.internal("thruster.ogg"));
 		Music soundRcs = Gdx.audio.newMusic(Gdx.files.internal("rcs.ogg"));
 		gameEngine = new GameEngine(soundThruster, soundRcs);
