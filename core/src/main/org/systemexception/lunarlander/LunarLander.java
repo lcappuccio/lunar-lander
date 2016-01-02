@@ -65,7 +65,7 @@ public class LunarLander extends ApplicationAdapter {
 		font.draw(batch, "V_Speed: " + String.format("%.1f", body.getLinearVelocity().y) + " m/s", 20, 520);
 		font.draw(batch, "Mass: " + String.format("%.0f", body.getMass()) + " kg", 20, 500);
 		HashMap<String, Object> userData = (HashMap<String, Object>) body.getUserData();
-		font.draw(batch, "G: " + String.format("%.2f", MathUtils.calculateAcceleration(body)), 20, 480);
+		font.draw(batch, "G: " + String.format("%.2f", MathUtils.calculateGForce(body)), 20, 480);
 		font.draw(batch, "Thrust: " + userData.get(BodiesNames.THRUST) + "%", 20, 460);
 		font.draw(batch, "Fuel: " + String.format("%.0f", (float) userData.get(BodiesNames.FUEL_AMOUNT)) + " kg",
 				20, 440);

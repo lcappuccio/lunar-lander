@@ -97,4 +97,15 @@ public class GameEngineTest {
 		assertTrue(angle1 < angle2);
 	}
 
+	@Test
+	public void acceleration_is_not_zero() {
+		Body body = sut.getBodies().get(BodiesNames.BOX_BODY);
+		HashMap<String, Object> userData = (HashMap<String, Object>) body.getUserData();
+		sut.logic();
+		float v1 = (float) userData.get(BodiesNames.V1);
+		sut.logic();
+		float v2 = (float) userData.get(BodiesNames.V2);
+		assertTrue(v1 != v2);
+	}
+
 }

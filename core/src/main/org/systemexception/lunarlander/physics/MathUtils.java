@@ -1,6 +1,7 @@
 package org.systemexception.lunarlander.physics;
 
 import com.badlogic.gdx.physics.box2d.Body;
+import org.systemexception.lunarlander.constants.BodiesNames;
 import org.systemexception.lunarlander.constants.Dimensions;
 
 import java.util.HashMap;
@@ -23,8 +24,8 @@ public class MathUtils {
 		return v;
 	}
 
-	public static float calculateAcceleration(Body body) {
+	public static float calculateGForce(Body body) {
 		HashMap<String, Object> userData = (HashMap<String, Object>) body.getUserData();
-		return ((float) userData.get("V2") - (float) userData.get("V1")) / Dimensions.TIME_STEP;
+		return ((float) userData.get(BodiesNames.V2) - (float) userData.get(BodiesNames.V1)) / Dimensions.TIME_STEP;
 	}
 }
