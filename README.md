@@ -1,6 +1,8 @@
 # Lunar Lander
 Lunar Lander, a [classic 1979 game](https://en.wikipedia.org/wiki/Lunar_Lander_%281979_video_game%29).
 
+![Lunar Lander Screen](/core/assets/screen.png)
+
 **Master**
 
 [![Build Status](https://travis-ci.org/lcappuccio/lunar-lander.svg?branch=master)](https://travis-ci.org/lcappuccio/lunar-lander)

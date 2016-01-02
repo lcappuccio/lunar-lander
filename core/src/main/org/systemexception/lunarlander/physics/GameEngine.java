@@ -28,6 +28,7 @@ public class GameEngine {
 
 	public GameEngine(final Music soundThruster, final Music soundRCS) {
 		this.soundThruster = soundThruster;
+		this.soundThruster.setLooping(true);
 		this.soundRCS_LEFT = soundRCS;
 		this.soundRCS_RIGHT = soundRCS;
 		userData.put(BodiesNames.THRUST, 0);
@@ -51,21 +52,19 @@ public class GameEngine {
 			float remainingFuel = (float) userData.get(BodiesNames.FUEL_AMOUNT) -
 					(Dimensions.FUEL_BURN_RATE * thrustPercent / 100f);
 			userData.put(BodiesNames.FUEL_AMOUNT, remainingFuel);
-			if (!soundThruster.isPlaying()) {
-				soundThruster.play();
-			}
 			float verticalThrust = (float) (Dimensions.THRUST * Math.sin(-box.getAngle())) * thrustPercent / 100f;
 			float horizontalThrust = (float) (Dimensions.THRUST * Math.cos(-box.getAngle())) * thrustPercent / 100f;
 			box.applyForce(new Vector2(verticalThrust, horizontalThrust), box.getPosition(), true);
 			MassData massData = box.getMassData();
 			massData.mass = Dimensions.BOX_HEAD_MASS + Dimensions.BOX_MASS + (float) userData.get(BodiesNames
 					.FUEL_AMOUNT);
+			if (!soundThruster.isPlaying()) {
+				soundThruster.play();
+			}
 			massData.center.set(box.getLocalCenter());
 			box.setMassData(massData);
 		} else {
-			if (soundThruster.isPlaying()) {
-				soundThruster.stop();
-			}
+			soundThruster.stop();
 		}
 		world.step(Dimensions.TIME_STEP, 8, 3);
 		userData.put(BodiesNames.V2, box.getLinearVelocity().y);

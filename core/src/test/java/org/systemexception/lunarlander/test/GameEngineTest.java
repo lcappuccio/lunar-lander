@@ -93,7 +93,6 @@ public class GameEngineTest {
 		double angle1 = MathUtils.normalRelativeAngle(body.getAngle());
 		sut.logic();
 		double angle2 = MathUtils.normalRelativeAngle(body.getAngle());
-		System.out.println(angle1 + ", " + angle2);
 		assertTrue(angle1 < angle2);
 	}
 
