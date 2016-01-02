@@ -32,7 +32,7 @@ public class LunarLander extends ApplicationAdapter {
 	@Override
 	public void create() {
 		batch = new PolygonSpriteBatch();
-		Music soundThruster = Gdx.audio.newMusic(Gdx.files.internal("thruster.ogg"));
+		Music soundThruster = Gdx.audio.newMusic(Gdx.files.internal("thruster_loop.ogg"));
 		Music soundRcs = Gdx.audio.newMusic(Gdx.files.internal("rcs.ogg"));
 		gameEngine = new GameEngine(soundThruster, soundRcs);
 		gameEngine.setUpObjects();
