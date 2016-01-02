@@ -44,9 +44,8 @@ public class GameEngine {
 
 	public void logic() {
 		input();
-		world.step(Dimensions.TIME_STEP, 8, 3);
 		Body box = bodies.get(BodiesNames.BOX_BODY);
-		userData.put("V1", box.getLinearVelocity().y);
+		userData.put(BodiesNames.V1, box.getLinearVelocity().y);
 		int thrustPercent = (int) userData.get(BodiesNames.THRUST);
 		if (thrustPercent > 0 && (float) userData.get(BodiesNames.FUEL_AMOUNT) > 0f) {
 			float remainingFuel = (float) userData.get(BodiesNames.FUEL_AMOUNT) -
@@ -68,7 +67,8 @@ public class GameEngine {
 				soundThruster.stop();
 			}
 		}
-		userData.put("V2", box.getLinearVelocity().y);
+		world.step(Dimensions.TIME_STEP, 8, 3);
+		userData.put(BodiesNames.V2, box.getLinearVelocity().y);
 	}
 
 	public void input() {
@@ -86,15 +86,11 @@ public class GameEngine {
 				soundRCS_RIGHT.play();
 			}
 		}
-		if (Gdx.input.isKeyPressed(Input.Keys.PERIOD)) {
-			if (thrustPercent < 100) {
-				userData.put(BodiesNames.THRUST, ++thrustPercent);
-			}
+		if (Gdx.input.isKeyPressed(Input.Keys.PERIOD) & thrustPercent < 100) {
+			userData.put(BodiesNames.THRUST, ++thrustPercent);
 		}
-		if (Gdx.input.isKeyPressed(Input.Keys.COMMA)) {
-			if (thrustPercent > 0) {
-				userData.put(BodiesNames.THRUST, --thrustPercent);
-			}
+		if (Gdx.input.isKeyPressed(Input.Keys.COMMA) & thrustPercent > 0) {
+			userData.put(BodiesNames.THRUST, --thrustPercent);
 		}
 	}
 
