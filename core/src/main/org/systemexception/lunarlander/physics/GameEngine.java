@@ -57,8 +57,7 @@ public class GameEngine {
 			box.applyForce(new Vector2(verticalThrust, horizontalThrust), box.getPosition(), true);
 			MassData massData = box.getMassData();
 			massData.mass = Dimensions.COMMAND_MODULE_MASS + Dimensions.DESCENT_STAGE_MASS + (float) userData.get
-					(BodiesNames
-					.FUEL_AMOUNT);
+					(BodiesNames.FUEL_AMOUNT);
 			if (!soundThruster.isPlaying()) {
 				soundThruster.play();
 			}
@@ -108,11 +107,16 @@ public class GameEngine {
 		Body descentStageBody = world.createBody(descentStageBodyDef);
 		FixtureDef descentStageFixture = new FixtureDef();
 		descentStageFixture.shape = descentStageShape;
-		descentStageFixture.density = 3800f;
-		descentStageFixture.restitution = 0.5f;
 		descentStageBody.createFixture(descentStageFixture);
 		bodies.put(BodiesNames.BOX_BODY, descentStageBody);
 		descentStageBody.setUserData(userData);
+		// Descent Stage Mass
+		MassData massData = new MassData();
+		massData.mass = Dimensions.COMMAND_MODULE_MASS + Dimensions.DESCENT_STAGE_MASS + (float) userData.get
+				(BodiesNames.FUEL_AMOUNT);
+		massData.center.set(descentStageBody.getLocalCenter());
+		massData.I = 5000f;
+		descentStageBody.setMassData(massData);
 
 		// Command Module
 		BodyDef commandModuleBodyDef = new BodyDef();
