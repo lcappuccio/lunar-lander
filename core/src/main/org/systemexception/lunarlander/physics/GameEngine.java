@@ -130,18 +130,7 @@ public class GameEngine {
 		commandModuleFixture.shape = commandModuleShape;
 		descentStageBody.createFixture(commandModuleFixture);
 		bodies.put(BodiesNames.BOX_HEAD, commandModuleBody);
-
-//		// Landing Gear
-//		BodyDef gearLeftDef = new BodyDef();
-//		gearLeftDef.type = DynamicBody;
-//		EdgeShape gearLeftShape = new EdgeShape();
-//		gearLeftShape.set(new Vector2(0f, 5f), new Vector2(5f, 0f));
-//		Body gearLeftBody = world.createBody(gearLeftDef);
-//		FixtureDef gearLeftFixture = new FixtureDef();
-//		gearLeftFixture.shapeLeftGear = gearLeftShape;
-//		gearLeftBody.createFixture(gearLeftFixture);
-
-
+		
 		// Left landing gear
 		BodyDef leftGear = new BodyDef();
 		leftGear.type = DynamicBody;
