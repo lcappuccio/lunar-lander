@@ -56,8 +56,8 @@ public class GameEngine {
 			float horizontalThrust = (float) (Dimensions.THRUST * Math.cos(-box.getAngle())) * thrustPercent / 100f;
 			box.applyForce(new Vector2(verticalThrust, horizontalThrust), box.getPosition(), true);
 			MassData massData = box.getMassData();
-			massData.mass = Dimensions.BOX_HEAD_MASS + Dimensions.BOX_MASS + (float) userData.get(BodiesNames
-					.FUEL_AMOUNT);
+			massData.mass = Dimensions.COMMAND_MODULE_MASS + Dimensions.DESCENT_STAGE_MASS + (float) userData.get
+					(BodiesNames.FUEL_AMOUNT);
 			if (!soundThruster.isPlaying()) {
 				soundThruster.play();
 			}
@@ -98,37 +98,42 @@ public class GameEngine {
 	 */
 	public void setUpObjects() {
 
-		// Character Body
-		BodyDef boxDef = new BodyDef();
-		boxDef.position.set(320 / Dimensions.METERS_TO_PIXELS, 240 / Dimensions.METERS_TO_PIXELS);
-		boxDef.type = DynamicBody;
-		PolygonShape boxShape = new PolygonShape();
-		boxShape.setAsBox(Dimensions.BOX_SIZE, Dimensions.BOX_SIZE);
-		Body box = world.createBody(boxDef);
-		FixtureDef boxFixture = new FixtureDef();
-		boxFixture.shape = boxShape;
-		boxFixture.density = 3800f;
-		boxFixture.restitution = 0.5f;
-		box.createFixture(boxFixture);
-		bodies.put(BodiesNames.BOX_BODY, box);
-		box.setUserData(userData);
+		// Descent Stage
+		BodyDef descentStageBodyDef = new BodyDef();
+		descentStageBodyDef.position.set(320 / Dimensions.METERS_TO_PIXELS, 240 / Dimensions.METERS_TO_PIXELS);
+		descentStageBodyDef.type = DynamicBody;
+		PolygonShape descentStageShape = new PolygonShape();
+		descentStageShape.setAsBox(Dimensions.DESCENT_STAGE_WIDTH, Dimensions.DESCENT_STAGE_HEIGHT);
+		Body descentStageBody = world.createBody(descentStageBodyDef);
+		FixtureDef descentStageFixture = new FixtureDef();
+		descentStageFixture.shape = descentStageShape;
+		descentStageBody.createFixture(descentStageFixture);
+		bodies.put(BodiesNames.BOX_BODY, descentStageBody);
+		descentStageBody.setUserData(userData);
+		// Descent Stage Mass
+		MassData massData = new MassData();
+		massData.mass = Dimensions.COMMAND_MODULE_MASS + Dimensions.DESCENT_STAGE_MASS + (float) userData.get
+				(BodiesNames.FUEL_AMOUNT);
+		massData.center.set(descentStageBody.getLocalCenter());
+		massData.I = 5000f;
+		descentStageBody.setMassData(massData);
 
-		// Character "head"
-		BodyDef boxHeadDef = new BodyDef();
-		boxHeadDef.position.set(boxDef.position.x, boxDef.position.y);
-		boxHeadDef.type = DynamicBody;
-		PolygonShape boxHeadShape = new PolygonShape();
-		boxHeadShape.setAsBox(Dimensions.BOX_HEAD_SIZE, Dimensions.BOX_HEAD_SIZE,
-				new Vector2(0, Dimensions.BOX_HEAD_SIZE + Dimensions.BOX_SIZE), 0);
-		Body boxHead = world.createBody(boxHeadDef);
-		FixtureDef boxHeadFixture = new FixtureDef();
-		boxHeadFixture.shape = boxHeadShape;
-		box.createFixture(boxHeadFixture);
-		bodies.put(BodiesNames.BOX_HEAD, boxHead);
+		// Command Module
+		BodyDef commandModuleBodyDef = new BodyDef();
+		commandModuleBodyDef.type = DynamicBody;
+		CircleShape commandModuleShape = new CircleShape();
+		commandModuleShape.setRadius(Dimensions.COMMAND_MODULE_RADIUS);
+		commandModuleShape.setPosition(new Vector2(0, Dimensions.COMMAND_MODULE_RADIUS +
+				Dimensions.DESCENT_STAGE_HEIGHT));
+		Body commandModuleBody = world.createBody(commandModuleBodyDef);
+		FixtureDef commandModuleFixture = new FixtureDef();
+		commandModuleFixture.shape = commandModuleShape;
+		descentStageBody.createFixture(commandModuleFixture);
+		bodies.put(BodiesNames.BOX_HEAD, commandModuleBody);
 
 		// Pointy polygon
 //		BodyDef pointDef = new BodyDef();
-//		pointDef.position.set(boxDef.position.x, boxDef.position.y + 10);
+//		pointDef.position.set(descentStageBodyDef.position.x, descentStageBodyDef.position.y + 10);
 //		pointDef.type = DynamicBody;
 //		Vector2[] vec2s = new Vector2[5];
 //		vec2s[0] = new Vector2(-1, 2);
