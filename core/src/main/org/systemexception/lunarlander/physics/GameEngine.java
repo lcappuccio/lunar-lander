@@ -131,25 +131,46 @@ public class GameEngine {
 		descentStageBody.createFixture(commandModuleFixture);
 		bodies.put(BodiesNames.BOX_HEAD, commandModuleBody);
 
-		// Pointy polygon
-//		BodyDef pointDef = new BodyDef();
-//		pointDef.position.set(descentStageBodyDef.position.x, descentStageBodyDef.position.y + 10);
-//		pointDef.type = DynamicBody;
-//		Vector2[] vec2s = new Vector2[5];
-//		vec2s[0] = new Vector2(-1, 2);
-//		vec2s[1] = new Vector2(-1, 0);
-//		vec2s[2] = new Vector2(0, -3);
-//		vec2s[3] = new Vector2(1, 0);
-//		vec2s[4] = new Vector2(1, 1);
-//		PolygonShape shape = new PolygonShape();
-//		shape.set(vec2s);
-//		Body pointBody = world.createBody(pointDef);
-//		FixtureDef fixtureDef = new FixtureDef();
-//		fixtureDef.density = 1;
-//		fixtureDef.shape = shape;
-//		fixtureDef.restitution = 0f;
-//		pointBody.createFixture(fixtureDef);
-//		bodies.put("BAU", pointBody);
+//		// Landing Gear
+//		BodyDef gearLeftDef = new BodyDef();
+//		gearLeftDef.type = DynamicBody;
+//		EdgeShape gearLeftShape = new EdgeShape();
+//		gearLeftShape.set(new Vector2(0f, 5f), new Vector2(5f, 0f));
+//		Body gearLeftBody = world.createBody(gearLeftDef);
+//		FixtureDef gearLeftFixture = new FixtureDef();
+//		gearLeftFixture.shapeLeftGear = gearLeftShape;
+//		gearLeftBody.createFixture(gearLeftFixture);
+
+
+		// Left landing gear
+		BodyDef leftGear = new BodyDef();
+		leftGear.type = DynamicBody;
+		Vector2[] vecLeftGear = new Vector2[3];
+		vecLeftGear[0] = new Vector2(-1f, Dimensions.COMMAND_MODULE_RADIUS + Dimensions.DESCENT_STAGE_HEIGHT - 1.5f);
+		vecLeftGear[1] = new Vector2(-1.8f, Dimensions.COMMAND_MODULE_RADIUS + Dimensions.DESCENT_STAGE_HEIGHT - 2.5f);
+		vecLeftGear[2] = new Vector2(-0.8f, Dimensions.COMMAND_MODULE_RADIUS + Dimensions.DESCENT_STAGE_HEIGHT - 1.5f);
+		PolygonShape shapeLeftGear = new PolygonShape();
+		shapeLeftGear.set(vecLeftGear);
+		world.createBody(leftGear);
+		FixtureDef fixtureLeftGear = new FixtureDef();
+		fixtureLeftGear.shape = shapeLeftGear;
+		fixtureLeftGear.restitution = 0.5f;
+		descentStageBody.createFixture(fixtureLeftGear);
+
+		// Right landing gear
+		BodyDef rightGear = new BodyDef();
+		rightGear.type = DynamicBody;
+		Vector2[] vecRightGear = new Vector2[3];
+		vecRightGear[0] = new Vector2(1f, Dimensions.COMMAND_MODULE_RADIUS + Dimensions.DESCENT_STAGE_HEIGHT - 1.5f);
+		vecRightGear[1] = new Vector2(1.8f, Dimensions.COMMAND_MODULE_RADIUS + Dimensions.DESCENT_STAGE_HEIGHT - 2.5f);
+		vecRightGear[2] = new Vector2(0.8f, Dimensions.COMMAND_MODULE_RADIUS + Dimensions.DESCENT_STAGE_HEIGHT - 1.5f);
+		PolygonShape shapeRightGear = new PolygonShape();
+		shapeRightGear.set(vecRightGear);
+		world.createBody(rightGear);
+		FixtureDef fixtureRightGear = new FixtureDef();
+		fixtureRightGear.shape = shapeRightGear;
+		fixtureRightGear.restitution = 0.5f;
+		descentStageBody.createFixture(fixtureRightGear);
 
 		// Ground Wall
 		putWall(0, 0, 30, 0, 0, 5, BodiesNames.GROUND);
