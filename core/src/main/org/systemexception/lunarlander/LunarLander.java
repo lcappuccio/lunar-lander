@@ -13,6 +13,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import org.systemexception.lunarlander.constants.BodiesNames;
 import org.systemexception.lunarlander.constants.Dimensions;
+import org.systemexception.lunarlander.decorators.StringDecorator;
 import org.systemexception.lunarlander.physics.GameEngine;
 import org.systemexception.lunarlander.physics.MathUtils;
 
@@ -37,7 +38,7 @@ public class LunarLander extends ApplicationAdapter {
 	@Override
 	public void create() {
 		batch = new SpriteBatch();
-		Music soundThruster = Gdx.audio.newMusic(Gdx.files.internal("thruster.ogg"));
+		Music soundThruster = Gdx.audio.newMusic(Gdx.files.internal("thruster_loop.ogg"));
 		Music soundRcs = Gdx.audio.newMusic(Gdx.files.internal("rcs.ogg"));
 		gameEngine = new GameEngine(soundThruster, soundRcs);
 		gameEngine.setUpObjects();
@@ -62,21 +63,26 @@ public class LunarLander extends ApplicationAdapter {
 		debugMatrix = batch.getProjectionMatrix().cpy().scale(Dimensions.METERS_TO_PIXELS,
 				Dimensions.METERS_TO_PIXELS, 0);
 		batch.begin();
-		Body body = gameEngine.getBodies().get(BodiesNames.BOX_BODY);
-		float v = (float) MathUtils.normalRelativeAngle(body.getAngle());
-		font.draw(batch, "Angle: " + String.format("%.2f", v) + " deg", 20, 580);
-		font.draw(batch, "Altitude: " + String.format("%.1f", body.getPosition().y) + " m", 20, 560);
-		font.draw(batch, "H_Speed: " + String.format("%.1f", Math.abs(body.getLinearVelocity().x)) + " m/s", 20,
-				540);
-		font.draw(batch, "V_Speed: " + String.format("%.1f", body.getLinearVelocity().y) + " m/s", 20, 520);
-		font.draw(batch, "Mass: " + String.format("%.0f", body.getMass()) + " kg", 20, 500);
-		HashMap<String, Object> userData = (HashMap<String, Object>) body.getUserData();
-		font.draw(batch, "G: " + String.format("%.2f", MathUtils.calculateGForce(body)), 20, 480);
-		font.draw(batch, "Thrust: " + userData.get(BodiesNames.THRUST) + "%", 20, 460);
-		font.draw(batch, "Fuel: " + String.format("%.0f", (float) userData.get(BodiesNames.FUEL_AMOUNT)) + " kg",
-				20, 440);
+		processBody();
 		batch.end();
 		debugRenderer.render(gameEngine.getWorld(), debugMatrix);
+	}
+
+	private void processBody() {
+		Body body = gameEngine.getBodies().get(BodiesNames.BOX_BODY);
+		float v = (float) MathUtils.normalRelativeAngle(body.getAngle());
+		font.draw(batch, "Angle: " + StringDecorator.floatToString2Decimal(v) + " deg", 20, 580);
+		font.draw(batch, "Altitude: " + StringDecorator.floatToString1Decimal(body.getPosition().y) + " m", 20, 560);
+		font.draw(batch, "H_Speed: " + StringDecorator.floatToString1Decimal(Math.abs(body.getLinearVelocity().x)) +
+				"m/s", 20, 540);
+		font.draw(batch, "V_Speed: " + StringDecorator.floatToString1Decimal(body.getLinearVelocity().y) +
+				" m/s", 20, 520);
+		font.draw(batch, "Mass: " + StringDecorator.floatToString0Decimal(body.getMass()) + " kg", 20, 500);
+		HashMap<String, Object> userData = (HashMap<String, Object>) body.getUserData();
+		font.draw(batch, "G: " + StringDecorator.floatToString1Decimal(MathUtils.calculateGForce(body)), 20, 480);
+		font.draw(batch, "Thrust: " + userData.get(BodiesNames.THRUST) + "%", 20, 460);
+		font.draw(batch, "Fuel: " +
+				StringDecorator.floatToString0Decimal((float) userData.get(BodiesNames.FUEL_AMOUNT)) + " kg", 20, 440);
 	}
 
 	@Override
