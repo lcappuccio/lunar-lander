@@ -6,6 +6,7 @@ import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import org.junit.Before;
 import org.junit.Test;
@@ -44,6 +45,8 @@ public class GameEngineTest {
 
 	@Test
 	public void object_free_fall() {
+		Body body = sut.getBodies().get(BodiesNames.BOX_BODY);
+		body.setTransform(new Vector2(10f,10f), 0);
 		for (int i = 0; i < 100; i++) {
 			float y1 = sut.getBodies().get(BodiesNames.BOX_BODY).getPosition().y;
 			sut.logic();
@@ -77,7 +80,7 @@ public class GameEngineTest {
 	@Test
 	public void rotate_left() {
 		Body body = sut.getBodies().get(BodiesNames.BOX_BODY);
-		body.setTransform(body.getPosition(), 0.5f);
+		body.setTransform(new Vector2(10f,10f), 0.5f);
 		when(Gdx.input.isKeyPressed(Input.Keys.A)).thenReturn(true);
 		double angle1 = MathUtils.normalRelativeAngle(body.getAngle());
 		sut.logic();
@@ -88,7 +91,7 @@ public class GameEngineTest {
 	@Test
 	public void rotate_right() {
 		Body body = sut.getBodies().get(BodiesNames.BOX_BODY);
-		body.setTransform(body.getPosition(), 0.5f);
+		body.setTransform(new Vector2(10f,10f), 0.5f);
 		when(Gdx.input.isKeyPressed(Input.Keys.D)).thenReturn(true);
 		double angle1 = MathUtils.normalRelativeAngle(body.getAngle());
 		sut.logic();
@@ -99,6 +102,7 @@ public class GameEngineTest {
 	@Test
 	public void acceleration_is_not_zero() {
 		Body body = sut.getBodies().get(BodiesNames.BOX_BODY);
+		body.setTransform(new Vector2(10f,10f), 0);
 		HashMap<String, Object> userData = (HashMap<String, Object>) body.getUserData();
 		sut.logic();
 		float v1 = (float) userData.get(BodiesNames.V1);
