@@ -37,7 +37,7 @@ public class LunarLander extends ApplicationAdapter {
 		Music soundRcs = Gdx.audio.newMusic(Gdx.files.internal("rcs.ogg"));
 		gameEngine = new GameEngine(soundThruster, soundRcs);
 
-		camera = new OrthographicCamera(Gdx.graphics.getWidth() * 4, Gdx.graphics.getHeight() * 4);
+		camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		camera.setToOrtho(false);
 
 		debugMatrix = new Matrix4(camera.combined);
