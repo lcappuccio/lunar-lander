@@ -102,7 +102,9 @@ public class GameEngine {
 
 		// Descent Stage
 		BodyDef descentStageBodyDef = new BodyDef();
-		descentStageBodyDef.position.set(320 / Dimensions.METERS_TO_PIXELS, 240 / Dimensions.METERS_TO_PIXELS);
+		descentStageBodyDef.position.set(
+				(Gdx.graphics.getWidth() / 2) / Dimensions.METERS_TO_PIXELS,
+				(Gdx.graphics.getHeight() * 0.9f) / Dimensions.METERS_TO_PIXELS);
 		descentStageBodyDef.type = DynamicBody;
 		PolygonShape descentStageShape = new PolygonShape();
 		descentStageShape.setAsBox(Dimensions.DESCENT_STAGE_WIDTH, Dimensions.DESCENT_STAGE_HEIGHT);
