@@ -9,6 +9,7 @@ import org.systemexception.lunarlander.constants.BodiesNames;
 import org.systemexception.lunarlander.constants.Dimensions;
 
 import java.util.HashMap;
+import java.util.Random;
 import java.util.UUID;
 
 import static com.badlogic.gdx.physics.box2d.BodyDef.BodyType.DynamicBody;
@@ -162,8 +163,8 @@ public class GameEngine {
 		fixtureRightGear.restitution = 0.5f;
 		descentStageBody.createFixture(fixtureRightGear);
 
-		// Ground Wall
-		putWall(0, 0, 30, 0, 0, 5, BodiesNames.GROUND);
+		// Ground
+		generateGround();
 		// Top Wall
 		putWall(0, 20, 30, 0, 0, 0, null);
 		// Left Wall
@@ -203,6 +204,28 @@ public class GameEngine {
 		} else {
 			bodies.put(wallName, body);
 		}
+	}
+
+	public void generateGround() {
+		BodyDef bodyDef = new BodyDef();
+		bodyDef.position.set(0,0);
+		bodyDef.type = StaticBody;
+		Vector2[] vector2s = new Vector2[50];
+		for (int i = 0; i < vector2s.length; i++) {
+			Random rnd = new Random();
+			float rndY = rnd.nextFloat() + rnd.nextInt(1);
+			vector2s[i] = new Vector2(i, rndY);
+		}
+		ChainShape polygonShape = new ChainShape();
+		polygonShape.createChain(vector2s);
+		Body body = world.createBody(bodyDef);
+		FixtureDef fixtureDef = new FixtureDef();
+		fixtureDef.density = 1f;
+		fixtureDef.restitution = 0f;
+		fixtureDef.friction = 5f;
+		fixtureDef.shape = polygonShape;
+		body.createFixture(fixtureDef);
+		bodies.put(BodiesNames.GROUND, body);
 	}
 
 }
