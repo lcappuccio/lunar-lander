@@ -9,6 +9,7 @@ import org.systemexception.lunarlander.constants.BodiesNames;
 import org.systemexception.lunarlander.constants.Dimensions;
 
 import java.util.HashMap;
+import java.util.Random;
 import java.util.UUID;
 
 import static com.badlogic.gdx.physics.box2d.BodyDef.BodyType.DynamicBody;
@@ -33,6 +34,7 @@ public class GameEngine {
 		this.soundRCS_RIGHT = soundRCS;
 		userData.put(BodiesNames.THRUST, 0);
 		userData.put(BodiesNames.FUEL_AMOUNT, Dimensions.FUEL_AMOUNT);
+		setUpObjects();
 	}
 
 	public World getWorld() {
@@ -100,7 +102,9 @@ public class GameEngine {
 
 		// Descent Stage
 		BodyDef descentStageBodyDef = new BodyDef();
-		descentStageBodyDef.position.set(320 / Dimensions.METERS_TO_PIXELS, 240 / Dimensions.METERS_TO_PIXELS);
+		descentStageBodyDef.position.set(
+				(Gdx.graphics.getWidth() / 2) / Dimensions.METERS_TO_PIXELS,
+				(Gdx.graphics.getHeight() * 0.9f) / Dimensions.METERS_TO_PIXELS);
 		descentStageBodyDef.type = DynamicBody;
 		PolygonShape descentStageShape = new PolygonShape();
 		descentStageShape.setAsBox(Dimensions.DESCENT_STAGE_WIDTH, Dimensions.DESCENT_STAGE_HEIGHT);
@@ -161,14 +165,17 @@ public class GameEngine {
 		fixtureRightGear.restitution = 0.5f;
 		descentStageBody.createFixture(fixtureRightGear);
 
-		// Ground Wall
-		putWall(0, 0, 30, 0, 0, 5, BodiesNames.GROUND);
+		// Ground
+		generateGround();
 		// Top Wall
-		putWall(0, 20, 30, 0, 0, 0, null);
+		putWall(0, Gdx.graphics.getHeight() / Dimensions.METERS_TO_PIXELS,
+				Gdx.graphics.getWidth() / Dimensions.METERS_TO_PIXELS, 0, 0, 0, null);
 		// Left Wall
-		putWall(0, 20, 0, 30, 0, 0, null);
+		putWall(0, Gdx.graphics.getHeight() / Dimensions.METERS_TO_PIXELS, 0,
+				Gdx.graphics.getWidth() / Dimensions.METERS_TO_PIXELS, 0, 0, null);
 		// Right Wall
-		putWall(26.7f, 0, 0, 30, 0, 0, null);
+		putWall(Gdx.graphics.getWidth() / Dimensions.METERS_TO_PIXELS, 0, 0,
+				Gdx.graphics.getHeight() / Dimensions.METERS_TO_PIXELS, 0, 0, null);
 	}
 
 	/**
@@ -202,6 +209,28 @@ public class GameEngine {
 		} else {
 			bodies.put(wallName, body);
 		}
+	}
+
+	public void generateGround() {
+		BodyDef bodyDef = new BodyDef();
+		bodyDef.position.set(0,0);
+		bodyDef.type = StaticBody;
+		Vector2[] vector2s = new Vector2[50];
+		for (int i = 0; i < vector2s.length; i++) {
+			Random rnd = new Random();
+			float rndY = rnd.nextFloat() + rnd.nextInt(1);
+			vector2s[i] = new Vector2(i, rndY);
+		}
+		ChainShape polygonShape = new ChainShape();
+		polygonShape.createChain(vector2s);
+		Body body = world.createBody(bodyDef);
+		FixtureDef fixtureDef = new FixtureDef();
+		fixtureDef.density = 1f;
+		fixtureDef.restitution = 0f;
+		fixtureDef.friction = 5f;
+		fixtureDef.shape = polygonShape;
+		body.createFixture(fixtureDef);
+		bodies.put(BodiesNames.GROUND, body);
 	}
 
 }
