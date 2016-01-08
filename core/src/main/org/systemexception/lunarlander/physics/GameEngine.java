@@ -166,11 +166,14 @@ public class GameEngine {
 		// Ground
 		generateGround();
 		// Top Wall
-		putWall(0, 20, 30, 0, 0, 0, null);
+		putWall(0, Gdx.graphics.getHeight() / Dimensions.METERS_TO_PIXELS,
+				Gdx.graphics.getWidth() / Dimensions.METERS_TO_PIXELS, 0, 0, 0, null);
 		// Left Wall
-		putWall(0, 20, 0, 30, 0, 0, null);
+		putWall(0, Gdx.graphics.getHeight() / Dimensions.METERS_TO_PIXELS, 0,
+				Gdx.graphics.getWidth() / Dimensions.METERS_TO_PIXELS, 0, 0, null);
 		// Right Wall
-		putWall(26.7f, 0, 0, 30, 0, 0, null);
+		putWall(Gdx.graphics.getWidth() / Dimensions.METERS_TO_PIXELS, 0, 0,
+				Gdx.graphics.getHeight() / Dimensions.METERS_TO_PIXELS, 0, 0, null);
 	}
 
 	/**
