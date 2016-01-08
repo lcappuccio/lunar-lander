@@ -220,7 +220,7 @@ public class GameEngine {
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.position.set(0,0);
 		bodyDef.type = StaticBody;
-		Vector2[] vector2s = new Vector2[50];
+		Vector2[] vector2s = new Vector2[(int) (Gdx.graphics.getWidth() / Dimensions.METERS_TO_PIXELS) + 1];
 		for (int i = 0; i < vector2s.length; i++) {
 			Random rnd = new Random();
 			float rndY = rnd.nextFloat() + rnd.nextInt(1);
