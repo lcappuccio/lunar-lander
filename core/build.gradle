@@ -13,6 +13,7 @@ test {
 		destinationFile = file("$buildDir/jacoco.exec")
 		classDumpFile = file("$buildDir/classpathdumps")
 		// excluded classes from coverage defined in above configuration
-		excludes = ["**/LunarLander*.java"]
+		excludes = ["**/*LunarLander.*", "**/*Dimensions.*"]
+
 	}
 }
