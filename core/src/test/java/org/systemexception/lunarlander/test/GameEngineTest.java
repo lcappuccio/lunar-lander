@@ -45,11 +45,12 @@ public class GameEngineTest {
 	@Test
 	public void object_free_fall() {
 		for (int i = 0; i < 100; i++) {
-			float y1 = sut.getBodies().get(BodiesNames.BOX_HEAD).getPosition().y;
+			float y1 = sut.getBodies().get(BodiesNames.BOX_BODY).getPosition().y;
 			sut.logic();
-			float y2 = sut.getBodies().get(BodiesNames.BOX_HEAD).getPosition().y;
+			float y2 = sut.getBodies().get(BodiesNames.BOX_BODY).getPosition().y;
 			assertTrue(y1 > y2);
 		}
+		assertTrue(MathUtils.calculateGForce(sut.getBodies().get(BodiesNames.BOX_BODY)) < 0);
 	}
 
 	@Test
