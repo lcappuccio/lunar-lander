@@ -103,7 +103,7 @@ public class GameEngine {
 		// Descent Stage
 		BodyDef descentStageBodyDef = new BodyDef();
 		descentStageBodyDef.position.set(
-				(Gdx.graphics.getWidth() / 2) / Dimensions.METERS_TO_PIXELS,
+				(Gdx.graphics.getWidth() / Dimensions.METERS_TO_PIXELS) / Dimensions.METERS_TO_PIXELS,
 				(Gdx.graphics.getHeight() * 0.9f) / Dimensions.METERS_TO_PIXELS);
 		descentStageBodyDef.type = DynamicBody;
 		PolygonShape descentStageShape = new PolygonShape();
@@ -164,6 +164,11 @@ public class GameEngine {
 		fixtureRightGear.shape = shapeRightGear;
 		fixtureRightGear.restitution = 0.5f;
 		descentStageBody.createFixture(fixtureRightGear);
+
+		// Apply initial position and speed
+		descentStageBody.setTransform((Gdx.graphics.getWidth() / 30f) / Dimensions.METERS_TO_PIXELS,
+				(Gdx.graphics.getHeight() * 0.9f) / Dimensions.METERS_TO_PIXELS, 1.5f);
+		descentStageBody.setLinearVelocity(8f, 0f);
 
 		// Ground
 		generateGround();
