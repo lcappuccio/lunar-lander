@@ -35,7 +35,6 @@ public class GameEngineTest {
 		Gdx.input = mock(Input.class);
 		Music soundThruster = mock(Music.class);
 		sut = new GameEngine(soundThruster, soundThruster);
-		sut.setUpObjects();
 	}
 
 	@Test

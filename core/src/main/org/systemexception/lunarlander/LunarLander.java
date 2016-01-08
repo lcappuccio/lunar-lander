@@ -17,6 +17,7 @@ import org.systemexception.lunarlander.decorators.StringDecorator;
 import org.systemexception.lunarlander.physics.GameEngine;
 import org.systemexception.lunarlander.physics.MathUtils;
 
+import javax.annotation.PreDestroy;
 import java.util.HashMap;
 
 public class LunarLander extends ApplicationAdapter {
@@ -35,7 +36,6 @@ public class LunarLander extends ApplicationAdapter {
 		Music soundThruster = Gdx.audio.newMusic(Gdx.files.internal("thruster_loop.ogg"));
 		Music soundRcs = Gdx.audio.newMusic(Gdx.files.internal("rcs.ogg"));
 		gameEngine = new GameEngine(soundThruster, soundRcs);
-		gameEngine.setUpObjects();
 
 		camera = new OrthographicCamera(Gdx.graphics.getWidth() * 4, Gdx.graphics.getHeight() * 4);
 		camera.setToOrtho(false);
@@ -80,6 +80,7 @@ public class LunarLander extends ApplicationAdapter {
 	}
 
 	@Override
+	@PreDestroy
 	public void dispose() {
 		gameEngine.getWorld().dispose();
 	}

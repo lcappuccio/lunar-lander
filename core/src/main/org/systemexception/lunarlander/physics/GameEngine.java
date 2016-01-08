@@ -33,6 +33,7 @@ public class GameEngine {
 		this.soundRCS_RIGHT = soundRCS;
 		userData.put(BodiesNames.THRUST, 0);
 		userData.put(BodiesNames.FUEL_AMOUNT, Dimensions.FUEL_AMOUNT);
+		setUpObjects();
 	}
 
 	public World getWorld() {
