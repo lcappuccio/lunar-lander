@@ -168,19 +168,13 @@ public class GameEngine {
 		// Apply initial position and speed
 		descentStageBody.setTransform((Gdx.graphics.getWidth() / 30f) / Dimensions.METERS_TO_PIXELS,
 				(Gdx.graphics.getHeight() * 0.9f) / Dimensions.METERS_TO_PIXELS, 1.5f);
-		descentStageBody.setLinearVelocity(8f, 0f);
+		descentStageBody.setLinearVelocity(20f, 0f);
 
 		// Ground
 		generateGround();
 		// Top Wall
 		putWall(0, Gdx.graphics.getHeight() / Dimensions.METERS_TO_PIXELS,
 				Gdx.graphics.getWidth() / Dimensions.METERS_TO_PIXELS, 0, 0, 0, null);
-		// Left Wall
-		putWall(0, Gdx.graphics.getHeight() / Dimensions.METERS_TO_PIXELS, 0,
-				Gdx.graphics.getWidth() / Dimensions.METERS_TO_PIXELS, 0, 0, null);
-		// Right Wall
-		putWall(Gdx.graphics.getWidth() / Dimensions.METERS_TO_PIXELS, 0, 0,
-				Gdx.graphics.getHeight() / Dimensions.METERS_TO_PIXELS, 0, 0, null);
 	}
 
 	/**
@@ -220,7 +214,8 @@ public class GameEngine {
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.position.set(0,0);
 		bodyDef.type = StaticBody;
-		Vector2[] vector2s = new Vector2[50];
+		// 3000 is a magical int for generating the ground, reduce and find out the consequences
+		Vector2[] vector2s = new Vector2[(int) (3000 / Dimensions.METERS_TO_PIXELS)];
 		for (int i = 0; i < vector2s.length; i++) {
 			Random rnd = new Random();
 			float rndY = rnd.nextFloat() + rnd.nextInt(1);
