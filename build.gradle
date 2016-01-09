@@ -23,7 +23,7 @@ allprojects {
 	apply plugin: 'base'
 	apply plugin: 'jacoco'
 
-	version = '0.3'
+	version = '0.4-SNAPSHOT'
 	ext {
 		appName = 'lunar-lander'
 		gdxVersion = '1.6.1'
