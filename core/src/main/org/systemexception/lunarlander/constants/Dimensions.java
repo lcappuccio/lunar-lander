@@ -19,6 +19,6 @@ public class Dimensions {
 	public final static float COMMAND_MODULE_MASS = 4700f;
 	public final static float FUEL_BURN_RATE = 5.0f;
 	public final static float FUEL_AMOUNT = 8200;
-	public final static float METERS_TO_PIXELS = 30f;
+	public final static float METERS_TO_PIXELS = 5f;
 	public final static float TIME_STEP = 1 / 60f;
 }

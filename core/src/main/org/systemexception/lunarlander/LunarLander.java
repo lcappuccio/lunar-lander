@@ -45,7 +45,6 @@ public class LunarLander extends ApplicationAdapter {
 
 		font = new BitmapFont();
 		font.setColor(Color.WHITE);
-
 	}
 
 	@Override
@@ -64,19 +63,35 @@ public class LunarLander extends ApplicationAdapter {
 
 	private void processBody() {
 		Body body = gameEngine.getBodies().get(BodiesNames.BOX_BODY);
+		int fontXCoord = 20;
+		int fontYCoord = 780;
+		int fontStep = 20;
+		if (body.getPosition().y < 50f) {
+			camera.zoom = 0.3f;
+			camera.position.x = body.getPosition().x * Dimensions.METERS_TO_PIXELS;
+			camera.position.y = body.getPosition().y * Dimensions.METERS_TO_PIXELS;
+			camera.position.z = 0f;
+			fontXCoord = (int) (body.getPosition().x * Dimensions.METERS_TO_PIXELS) - 180;
+			fontYCoord = (int) (body.getPosition().y * Dimensions.METERS_TO_PIXELS) + 100;
+			font.getData().setScale(0.3f, 0.3f);
+			fontStep = 5;
+		}
 		float v = (float) MathUtils.normalRelativeAngle(body.getAngle());
-		font.draw(batch, "Angle: " + StringDecorator.floatToString2Decimal(v) + " deg", 20, 780);
-		font.draw(batch, "Altitude: " + StringDecorator.floatToString1Decimal(body.getPosition().y) + " m", 20, 760);
+		font.draw(batch, "Angle: " + StringDecorator.floatToString2Decimal(v) + " deg", fontXCoord, fontYCoord);
+		font.draw(batch, "Altitude: " + StringDecorator.floatToString1Decimal(body.getPosition().y) + " m",
+				fontXCoord, fontYCoord -= fontStep);
 		font.draw(batch, "H_Speed: " + StringDecorator.floatToString1Decimal(Math.abs(body.getLinearVelocity().x)) +
-				"m/s", 20, 740);
+				"m/s", fontXCoord, fontYCoord -= fontStep);
 		font.draw(batch, "V_Speed: " + StringDecorator.floatToString1Decimal(body.getLinearVelocity().y) +
-				" m/s", 20, 720);
-		font.draw(batch, "Mass: " + StringDecorator.floatToString0Decimal(body.getMass()) + " kg", 20, 700);
+				" m/s", fontXCoord, fontYCoord -= fontStep);
+		font.draw(batch, "Mass: " + StringDecorator.floatToString0Decimal(body.getMass()) + " kg", fontXCoord, fontYCoord -= fontStep);
 		HashMap<String, Object> userData = (HashMap<String, Object>) body.getUserData();
-		font.draw(batch, "G: " + StringDecorator.floatToString1Decimal(MathUtils.calculateGForce(body)), 20, 680);
-		font.draw(batch, "Thrust: " + userData.get(BodiesNames.THRUST) + "%", 20, 660);
+		font.draw(batch, "G: " + StringDecorator.floatToString1Decimal(MathUtils.calculateGForce(body)), fontXCoord,
+				fontYCoord -= fontStep);
+		font.draw(batch, "Thrust: " + userData.get(BodiesNames.THRUST) + "%", fontXCoord, fontYCoord -= fontStep);
 		font.draw(batch, "Fuel: " +
-				StringDecorator.floatToString0Decimal((float) userData.get(BodiesNames.FUEL_AMOUNT)) + " kg", 20, 640);
+				StringDecorator.floatToString0Decimal((float) userData.get(BodiesNames.FUEL_AMOUNT)) + " kg",
+				fontXCoord, fontYCoord - fontStep);
 	}
 
 	@Override
