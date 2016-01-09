@@ -168,7 +168,7 @@ public class GameEngine {
 		// Apply initial position and speed
 		descentStageBody.setTransform((Gdx.graphics.getWidth() / 30f) / Dimensions.METERS_TO_PIXELS,
 				(Gdx.graphics.getHeight() * 0.9f) / Dimensions.METERS_TO_PIXELS, 1.5f);
-		descentStageBody.setLinearVelocity(8f, 0f);
+		descentStageBody.setLinearVelocity(20f, 0f);
 
 		// Ground
 		generateGround();
