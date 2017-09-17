@@ -3,6 +3,7 @@ package org.systemexception.lunarlander.test;
 import org.junit.Test;
 import org.systemexception.lunarlander.decorators.StringDecorator;
 
+import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
 
 /**
@@ -21,12 +22,12 @@ public class StringDecoratorTest {
 
 	@Test
 	public void one_decimal() {
-		assertTrue("0.1".equals(StringDecorator.floatToString1Decimal(TEST)));
+		assertEquals("0.1", StringDecorator.floatToString1Decimal(TEST));
 	}
 
 	@Test
 	public void two_decimals() {
-		assertTrue("0.12".equals(StringDecorator.floatToString2Decimal(TEST)));
+		assertEquals("0.12", StringDecorator.floatToString2Decimal(TEST));
 	}
 
 
